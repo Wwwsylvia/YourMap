@@ -1,0 +1,80 @@
+/* Empty. Add your own CSS if you like */
+.my-view {
+  font-family: "sans-serif";
+}
+
+.my-view-title {
+  font-family: "华文细黑";
+  font-weight: bold;
+}
+
+.personal-avatar-block {
+  height: 250px;
+}
+
+
+.personal-avatar-img {
+  display: block;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 120px;
+  height: 120px;
+
+  overflow: hidden;
+  border-radius: 60px;
+}
+
+.personal-avatar-name {
+  display: block;
+  margin-top: 15px;
+  margin-left: auto;
+  margin-right: auto;
+
+  width: 60%;
+  height: 30px;
+
+  text-align: center;
+  font-size: 16px;
+  color: dimgray;
+}
+
+.personal-avatar-buttons-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+
+  width: 300px;
+  height: 30px;
+
+}
+
+.personal-avatar-button {
+  position: relative;
+  left: 30px;
+
+  margin-top: 10px;
+  margin-right: 40px;
+  width: 100px;
+  height: 30px;
+
+  background-color: steelblue;
+  font-size: 15px;
+  color: white;
+  border: 0;
+  border-radius: 3px;
+
+}
+
+.personal-list {
+  color:dimgray !important;
+}
+
+footer {
+  text-align: center;
+}
+
+footer > a {
+  color: darkgray;
+  text-decoration: none;
+}
