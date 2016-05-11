@@ -83,7 +83,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         controller: 'PersonalCtrl'
       }
     }
-  });
+  })
+
+    .state('register', {
+      url: '/register',
+      templateUrl: 'templates/register.tpl.html'
+      // url: '/register',
+      // views: {
+      //   'register': {
+      //     templateUrl: 'templates/register.tpl.html',
+      //     controller: 'RegisterCtrl'
+      //   }
+      // }
+    })
+
+    .state('login', {
+      url: '/login',
+      templateUrl: 'templates/login.tpl.html'
+    });
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');

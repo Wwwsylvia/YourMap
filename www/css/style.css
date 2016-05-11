@@ -1,6 +1,7 @@
 /* Empty. Add your own CSS if you like */
 .my-view {
   font-family: "sans-serif";
+  background-color: whitesmoke;
 }
 
 .my-view-title {
@@ -8,8 +9,11 @@
   font-weight: bold;
 }
 
+
+/* Personal */
+
 .personal-avatar-block {
-  height: 250px;
+  height: 230px;
 }
 
 
@@ -18,11 +22,14 @@
   margin-top: 20px;
   margin-left: auto;
   margin-right: auto;
+  /*padding:2px;*/
   width: 120px;
   height: 120px;
 
   overflow: hidden;
+  /*border: 3px solid lightblue;*/
   border-radius: 60px;
+  /*box-shadow: 2px 2px 2px 2px lightgray;*/
 }
 
 .personal-avatar-name {
@@ -41,30 +48,36 @@
 
 .personal-avatar-buttons-block {
   display: block;
+  margin-top: 10px;
   margin-left: auto;
   margin-right: auto;
 
-  width: 300px;
+  width: 80px;
   height: 30px;
 
 }
 
 .personal-avatar-button {
-  position: relative;
-  left: 30px;
-
-  margin-top: 10px;
-  margin-right: 40px;
-  width: 100px;
-  height: 30px;
-
-  background-color: steelblue;
-  font-size: 15px;
-  color: white;
-  border: 0;
-  border-radius: 3px;
-
+  text-decoration: none;
+  color: steelblue;
 }
+
+/*.personal-avatar-button {*/
+  /*position: relative;*/
+  /*left: 30px;*/
+
+  /*margin-top: 10px;*/
+  /*margin-right: 40px;*/
+  /*width: 100px;*/
+  /*height: 30px;*/
+
+  /*background-color: steelblue;*/
+  /*font-size: 15px;*/
+  /*color: white;*/
+  /*border: 0;*/
+  /*border-radius: 3px;*/
+
+/*}*/
 
 .personal-list {
   color:dimgray !important;
@@ -77,4 +90,84 @@ footer {
 footer > a {
   color: darkgray;
   text-decoration: none;
+}
+
+
+
+ /*  Register */
+.register-block {
+  margin-top: 30px;
+  margin-left: 15px;
+  margin-right: 15px;
+  /*padding-top: 20px;*/
+  /*padding-left: 10px;*/
+  /*padding-right: 10px;*/
+  /*height: 150px;*/
+
+  /*background-color: white;*/
+}
+
+.register-input {
+  margin-top: 8px;
+
+  border-radius: 4px;
+  border-color: lightgray;
+}
+
+/*.register-login-link {*/
+  /*display: block;*/
+
+  /*text-align: center;*/
+  /*text-decoration: none;*/
+  /*color: gray;*/
+/*}*/
+
+
+/* Login */
+.login-block {
+  margin-top: 30px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.login-input {
+  margin-top: 8px;
+
+  border-radius: 4px;
+  border-color: lightgray;
+}
+
+.login-button {
+  display: block;
+  margin-bottom: 10px;
+  padding-left: 12px;
+  padding-right: 12px;
+
+  width: 364px;
+  height: 47px;
+
+  border: 1px solid lightgray !important;
+  border-radius: 4px;
+
+  text-decoration: none;
+  text-align: center;
+  vertical-align: top;
+  font-size: 15px;
+  color: dimgray !important;
+}
+
+.weibo-button {
+  border: 1px solid orangered !important;
+  /*color: orangered;*/
+}
+
+.wechat-button {
+  border: 1px solid limegreen !important;
+  /*color: limegreen;*/
+}
+
+.login-button-icon {
+  position: relative;
+  top:5px;
+  left: -8px;
 }
