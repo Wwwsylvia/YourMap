@@ -3,8 +3,8 @@
   <ion-content>
     <div class="list login-block">
       <label class="item item-input login-input">
-        <span class="input-label">邮箱：</span>
-        <input type="email" placeholder="已绑定的邮箱">
+        <span class="input-label">用户名：</span>
+        <input type="text" placeholder="注册时填写的用户名">
       </label>
       <label class="item item-input login-input">
         <span class="input-label">密码：</span>
@@ -13,15 +13,15 @@
     </div>
 
     <div class="padding">
-      <button class="button button-block button-outline button-positive login-button">登录</button>
+      <button class="button button-block button-outline button-light login-button" ng-click="login()">立即登录</button>
     </div>
 
     <div class="padding">
-      <a class="login-button weibo-button"><img class="login-button-icon" src="../resources/test/LOGO_32.png">微博账号登录</a>
+      <a class="button button-block button-outline button-light login-button weibo-button"><img class="login-button-icon" src="../resources/test/LOGO_32.png">微博账号登录</a>
     </div>
 
     <div class="padding">
-      <a class="login-button wechat-button"><img class="login-button-icon" src="../resources/test/icon32_wx_logo.png">微信账号登录</a>
+      <a class="button button-block button-outline button-light login-button wechat-button"><img class="login-button-icon" src="../resources/test/icon32_wx_logo.png">微信账号登录</a>
     </div>
 
 

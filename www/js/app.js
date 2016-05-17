@@ -7,105 +7,113 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
-.run(function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);
+  .run(function ($ionicPlatform) {
+    $ionicPlatform.ready(function () {
+      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+      // for form inputs)
+      if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+        cordova.plugins.Keyboard.disableScroll(true);
 
-    }
-    if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
-    }
-  });
-})
+      }
+      if (window.StatusBar) {
+        // org.apache.cordova.statusbar required
+        StatusBar.styleDefault();
+      }
+    });
+  })
 
-  .config(function($ionicConfigProvider) {
+  .config(function ($ionicConfigProvider) {
     $ionicConfigProvider.tabs.position('bottom');
   })
 
 
-.config(function($stateProvider, $urlRouterProvider) {
+  .config(function ($stateProvider, $urlRouterProvider) {
 
 
-  // Ionic uses AngularUI Router which uses the concept of states
-  // Learn more here: https://github.com/angular-ui/ui-router
-  // Set up the various states which the app can be in.
-  // Each state's controller can be found in controllers.js
-  $stateProvider
+    // Ionic uses AngularUI Router which uses the concept of states
+    // Learn more here: https://github.com/angular-ui/ui-router
+    // Set up the various states which the app can be in.
+    // Each state's controller can be found in controllers.js
+    $stateProvider
 
-  // setup an abstract state for the tabs directive
-    .state('tab', {
-    url: '/tab',
-    abstract: true,
-    templateUrl: 'templates/tabs.html'
-  })
+    // setup an abstract state for the tabs directive
+      .state('tab', {
+        url: '/tab',
+        abstract: true,
+        templateUrl: 'templates/tabs.html'
+      })
 
-  // Each tab has its own nav history stack:
+      // Each tab has its own nav history stack:
 
-  .state('tab.dash', {
-    url: '/dash',
-    views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
-      }
-    }
-  })
-
-  .state('tab.nearby', {
-      url: '/chats',
-      views: {
-        'tab-nearby': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
+      .state('tab.dash', {
+        url: '/dash',
+        views: {
+          'tab-dash': {
+            templateUrl: 'templates/tab-dash.html',
+            controller: 'DashCtrl'
+          }
         }
-      }
-    })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
-      views: {
-        'tab-nearby': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
+      })
+
+      .state('tab.nearby', {
+        url: '/chats',
+        views: {
+          'tab-nearby': {
+            templateUrl: 'templates/tab-chats.html',
+            controller: 'ChatsCtrl'
+          }
         }
-      }
-    })
+      })
+      .state('tab.chat-detail', {
+        url: '/chats/:chatId',
+        views: {
+          'tab-nearby': {
+            templateUrl: 'templates/chat-detail.html',
+            controller: 'ChatDetailCtrl'
+          }
+        }
+      })
 
-  .state('tab.personal', {
-    url: '/personal',
-    views: {
-      'tab-personal': {
-        templateUrl: 'templates/tab-personal.html',
-        controller: 'PersonalCtrl'
-      }
-    }
-  })
+      .state('tab.personal', {
+        url: '/personal',
+        views: {
+          'tab-personal': {
+            templateUrl: 'templates/tab-personal.html',
+            controller: 'PersonalCtrl'
+          }
+        }
+      })
 
-    .state('register', {
-      url: '/register',
-      templateUrl: 'templates/register.tpl.html'
-      // url: '/register',
-      // views: {
-      //   'register': {
-      //     templateUrl: 'templates/register.tpl.html',
-      //     controller: 'RegisterCtrl'
-      //   }
-      // }
-    })
+      .state('register', {
+        url: '/register',
+        templateUrl: 'templates/register.tpl.html',
+        controller:'RegisterCtrl'
+        // url: '/register',
+        // views: {
+        //   'register': {
+        //     templateUrl: 'templates/register.tpl.html',
+        //     controller: 'RegisterCtrl'
+        //   }
+        // }
+      })
 
-    .state('login', {
-      url: '/login',
-      templateUrl: 'templates/login.tpl.html'
-    });
+      .state('login', {
+        url: '/login',
+        templateUrl: 'templates/login.tpl.html',
+        controller:'LoginCtrl'
+      })
 
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
+      .state('changeAvatar', {
+        url: '/change-avatar',
+        templateUrl: 'templates/change_avatar.tpl.html',
+        controller:'ChangeAvatarCtrl'
+      });
 
-});
+    // if none of the above states are matched, use this as the fallback
+    $urlRouterProvider.otherwise('/tab/dash');
+
+  });
 
 
 
