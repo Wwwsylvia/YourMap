@@ -1,0 +1,18 @@
+<ion-view view-title="">
+    <ion-nav-bar class="bar bar-positive"></ion-nav-bar>
+    <ion-nav-buttons side="left">
+        <button class="button button-icon icon ion-android-walk" ng-click="showPopup()"></button>
+
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <!--<button class="button button-icon icon ion-android-walk" ng-click="showPopup()"></button>-->
+
+        <div id="r-result"><input type="text" id="suggestId" size="20" style="width:300px;padding-left:10px" value="" placeholder="上海迪士尼乐园"/></div>
+        <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:300px;height:auto; display:none;"></div>
+        <button class="button button-icon icon ion-ios-eye" ng-click="searchSights()"></button>
+    </ion-nav-buttons>
+
+  <ion-content>
+      <div id="container"></div>
+  </ion-content>
+</ion-view>

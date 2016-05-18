@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'rootTabModule','mainListModule','mapModule'])
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -24,7 +24,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   })
 
   .config(function ($ionicConfigProvider) {
-    $ionicConfigProvider.tabs.position('bottom');
+    $ionicConfigProvider.platform.ios.tabs.style('standard');
+    $ionicConfigProvider.platform.ios.tabs.position('bottom');
+    $ionicConfigProvider.platform.android.tabs.style('standard');
+    $ionicConfigProvider.platform.android.tabs.position('standard');
+
+    $ionicConfigProvider.platform.ios.navBar.alignTitle('center');
+    $ionicConfigProvider.platform.android.navBar.alignTitle('center');
+
+    //$ionicConfigProvider.platform.ios.backButton.previousTitleText('').icon('ion-ios-arrow-thin-left');
+    //$ionicConfigProvider.platform.android.backButton.previousTitleText('').icon('ion-android-arrow-back');
+
+    $ionicConfigProvider.platform.ios.views.transition('ios');
+    $ionicConfigProvider.platform.android.views.transition('android');
   })
 
 
@@ -41,20 +53,35 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       .state('tab', {
         url: '/tab',
         abstract: true,
-        templateUrl: 'templates/tabs.html'
+        templateUrl: 'templates/tabs.html',
+        controller: "RootTabCtrl"
       })
 
+      .state('tab.main', {
+        url: '/main',
+        views: {
+          'tab-scenicSpots': {
+            templateUrl: "templates/main.tpl.html",
+            controller: 'MainListCtrl'
+
+          }
+
+        }
+
+      })
+      .state('tab.map', {
+        url: '/map',
+        views: {
+          'tab-nearby': {
+            templateUrl: "templates/map.tpl.html",
+            controller: 'MapCtrl'
+          }
+
+        }
+
+      })
       // Each tab has its own nav history stack:
 
-      .state('tab.dash', {
-        url: '/dash',
-        views: {
-          'tab-dash': {
-            templateUrl: 'templates/tab-dash.html',
-            controller: 'DashCtrl'
-          }
-        }
-      })
 
       .state('tab.nearby', {
         url: '/chats',
