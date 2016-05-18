@@ -88,9 +88,11 @@ angular.module('starter.controllers', [])
       $state.go(path);
     };
 
+    // $scope.imgSrc = "../resources/test/head.png";
+
     $scope.addPhoto = function () {
       $ionicActionSheet.show({
-        cancelOnstateChange: true,
+        cancelOnStateChange: true,
         cssClass: 'actions_s',
         titleText: "图片来源",
         buttons: [
