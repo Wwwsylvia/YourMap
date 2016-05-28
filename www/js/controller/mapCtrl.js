@@ -3,6 +3,7 @@
  */
 angular.module('mapModule', [])
   .controller('MapCtrl', ['$scope', '$ionicPopup', '$timeout', '$interval', '$http', '$state', function ($scope, $ionicPopup, $timeout, $interval, $http, $state) {
+    var selectedSightID;
     var map = new BMap.Map("container");          // 创建地图实例
     var point = new BMap.Point(121.48, 31.22);  // 创建点坐标
     map.centerAndZoom(point, 15);                 // 初始化地图，设置中心点坐标和地图级别
@@ -33,7 +34,7 @@ angular.module('mapModule', [])
       geolocation.getCurrentPosition(function (r) {
         if (this.getStatus() == BMAP_STATUS_SUCCESS) {
           var myMarker = new BMap.Marker(r.point);
-          map.clearOverlays();
+         // map.clearOverlays();
           map.addOverlay(myMarker);
           map.panTo(r.point);
           console.log('您的位置：' + r.point.lng + ',' + r.point.lat);
@@ -102,12 +103,53 @@ angular.module('mapModule', [])
 
     // 提示控件 end
 
+    // 定义一个控件类,即function
+    function lookSightDetail(){
+      // 默认停靠位置和偏移量
+      this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
+      this.defaultOffset = new BMap.Size(50, 20);
+    }
+
+    // 通过JavaScript的prototype属性继承于BMap.Control
+    lookSightDetail.prototype = new BMap.Control();
+
+    // 自定义控件必须实现自己的initialize方法,并且将控件的DOM元素返回
+    // 在本方法中创建个div元素作为控件的容器,并将其添加到地图容器中
+    lookSightDetail.prototype.initialize = function(map){
+      // 创建一个DOM元素
+      var div = document.createElement("div");
+      // 添加文字说明
+      div.appendChild(document.createTextNode("查看景点详情"));
+      // 设置样式
+      div.style.cursor = "pointer";
+      div.style.border = "1px solid gray";
+      div.style.backgroundColor = "white";
+      // 绑定事件,点击一次放大两级
+      div.onclick = function(e){
+        if (selectedSightID != undefined) {
+          $state.go('sightDetail',{sightID:selectedSightID});
+        } else {
+
+        }
+      }
+      // 添加DOM元素到地图中
+      map.getContainer().appendChild(div);
+      // 将DOM元素返回
+      return div;
+    }
+    // 创建控件
+    var myDetailCtrl = new lookSightDetail();
+    // 添加到地图当中
+    map.addControl(myDetailCtrl);
 
     // 点击显示标签 start
+    var title ="天安门";
+    var info = "天安门坐落在中国北京市中心,故宫的南侧,与天安门广场隔长安街相望,是清朝皇城的大门...";
+    var img = "http://app.baidu.com/map/images/tiananmen.jpg";
     var sContent =
-      "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>天安门</h4>" +
-      "<img style='float:right;margin:4px' id='imgDemo' src='http://app.baidu.com/map/images/tiananmen.jpg' width='139' height='104' title='天安门'/>" +
-      "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>天安门坐落在中国北京市中心,故宫的南侧,与天安门广场隔长安街相望,是清朝皇城的大门...</p>" +
+      "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>"+title+"</h4>" +
+      "<img style='float:right;margin:4px' id='imgDemo' src='"+img+"' width='139' height='104' title='天安门'/>" +
+      "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>"+info+"</p>" +
       "</div>";
     var point = new BMap.Point(121.48, 31.22);
     var marker = new BMap.Marker(point);
@@ -119,6 +161,7 @@ angular.module('mapModule', [])
       document.getElementById('imgDemo').onload = function () {
         infoWindow.redraw();   //防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
       }
+      selectedSightID = "dd";
     });
 
     // 点击显示标签 end
