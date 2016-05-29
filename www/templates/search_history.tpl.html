@@ -1,0 +1,22 @@
+<ion-view view-title="搜索">
+  <ion-nav-bar class="bar bar-positive"></ion-nav-bar>
+  <ion-nav-buttons side="left">
+    <button class="button button-positive" ng-click="goBack()"><i class="ion-arrow-left-c"></i> 后退</button>
+  </ion-nav-buttons>
+
+  <ion-content>
+    <input ng-model="input.inputContent" placeholder="景点名称" ng-change="inputChange()"/>
+    <button class="button button-positive" ng-click="search()">搜索</button>
+    <br>
+    <br>
+    <div class="list">
+      <div class="item" ng-repeat="item in historyList | filter:input.inputContent">
+        <div ng-click="searchSight(item)">{{item}}</div>
+      </div>
+    </div>
+
+
+    <button class="button button-positive" ng-click="clearHistory()">清空历史记录</button>
+
+  </ion-content>
+</ion-view>

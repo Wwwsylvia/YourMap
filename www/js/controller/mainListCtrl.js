@@ -4,7 +4,7 @@
 
 
 angular.module('mainListModule', [])
-    .controller('MainListCtrl', ['$scope', function ($scope) {
+    .controller('MainListCtrl', ['$scope', '$state',function ($scope,$state) {
         $scope.title = '首页';
         $scope.data = [{
             "name": "南京东路",
@@ -34,6 +34,10 @@ angular.module('mainListModule', [])
         $scope.sort3 = function () {
 
         }
+
+      $scope.searchScene = function(){
+        $state.go('searchHistory');
+      }
     }])
 
 

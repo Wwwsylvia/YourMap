@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ngCordova', 'ionic', 'starter.controllers', 'starter.services', 'rootTabModule', 'mainListModule', 'addNewSightModule', 'sightDetailModule', 'mapModule'])
+angular.module('starter', ['ngCordova', 'ionic', 'starter.controllers', 'starter.services', 'rootTabModule', 'mainListModule', 'addNewSightModule', 'sightDetailModule', 'searchHistoryModule', 'mapModule'])
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -123,6 +123,11 @@ angular.module('starter', ['ngCordova', 'ionic', 'starter.controllers', 'starter
         //     controller: 'RegisterCtrl'
         //   }
         // }
+      })
+      .state('searchHistory', {
+        url: '/searchHistory',
+        templateUrl: 'templates/search_history.tpl.html',
+        controller: 'SearchHistoryCtrl'
       })
       .state('newSight', {
         url: '/newSight?:lng:lat',
