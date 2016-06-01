@@ -2,7 +2,7 @@
  * Created by HF Q on 2016/5/8.
  */
 angular.module('mapModule', [])
-  .controller('MapCtrl', ['$scope', '$ionicPopup', '$timeout', '$interval', '$http', '$state', function ($scope, $ionicPopup, $timeout, $interval, $http, $state) {
+  .controller('MapCtrl', ['$scope', '$ionicPopup', '$timeout', '$interval', '$http', '$state', '$stateParams',function ($scope, $ionicPopup, $timeout, $interval, $http, $state,$stateParams) {
     var selectedSightID;
     var map = new BMap.Map("container");          // 创建地图实例
     var point = new BMap.Point(121.48, 31.22);  // 创建点坐标
@@ -165,6 +165,21 @@ angular.module('mapModule', [])
     });
 
     // 点击显示标签 end
+
+
+    if ($stateParams.sightName != undefined){
+        map.clearOverlays();    //清除地图上所有覆盖物
+        function myFun() {
+          var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+          map.centerAndZoom(pp, 18);
+          map.addOverlay(new BMap.Marker(pp));    //添加标注
+        }
+
+        var local = new BMap.LocalSearch(map, { //智能搜索
+          onSearchComplete: myFun
+        });
+        local.search($stateParams.sightName);
+    }
 
     // 路线规划 start
     $scope.data = {};

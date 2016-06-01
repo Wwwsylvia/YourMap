@@ -2,7 +2,7 @@
  * Created by HF Q on 2016/5/29.
  */
 angular.module('searchHistoryModule',[])
-.controller('SearchHistoryCtrl',['$scope','$ionicNavBarDelegate',function($scope,$ionicNavBarDelegate){
+.controller('SearchHistoryCtrl',['$scope','$ionicNavBarDelegate','$state',function($scope,$ionicNavBarDelegate,$state){
   Array.prototype.unique = function()
   {
     this.sort();
@@ -49,13 +49,17 @@ angular.module('searchHistoryModule',[])
       $.cookie("searchHistory",searchHistory);
     }
 
+    $state.go("tab.map",{"sightName":item});
+
     $scope.input.inputContent="";
 
 
   }
 
 
-
+  $scope.searchSight = function(item){
+    $state.go("tab.map",{"sightName":item});
+  }
 
 
   $scope.inputChange = function(){

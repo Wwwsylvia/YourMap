@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ngCordova', 'ionic', 'starter.controllers', 'starter.services', 'rootTabModule', 'mainListModule', 'addNewSightModule', 'sightDetailModule', 'searchHistoryModule', 'mapModule'])
+angular.module('starter', ['ngCordova', 'ionic', 'rootTabModule', 'mainListModule', 'addNewSightModule', 'sightDetailModule', 'searchHistoryModule', 'mapModule','personalModule','loginModule','registerModule','changeAvatarModule'])
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -70,7 +70,7 @@ angular.module('starter', ['ngCordova', 'ionic', 'starter.controllers', 'starter
 
       })
       .state('tab.map', {
-        url: '/map',
+        url: '/map?sightName',
         views: {
           'tab-nearby': {
             templateUrl: "templates/map.tpl.html",
@@ -83,24 +83,24 @@ angular.module('starter', ['ngCordova', 'ionic', 'starter.controllers', 'starter
       // Each tab has its own nav history stack:
 
 
-      .state('tab.nearby', {
-        url: '/chats',
-        views: {
-          'tab-nearby': {
-            templateUrl: 'templates/tab-chats.html',
-            controller: 'ChatsCtrl'
-          }
-        }
-      })
-      .state('tab.chat-detail', {
-        url: '/chats/:chatId',
-        views: {
-          'tab-nearby': {
-            templateUrl: 'templates/chat-detail.html',
-            controller: 'ChatDetailCtrl'
-          }
-        }
-      })
+      //.state('tab.nearby', {
+      //  url: '/chats',
+      //  views: {
+      //    'tab-nearby': {
+      //      templateUrl: 'templates/tab-chats.html',
+      //      controller: 'ChatsCtrl'
+      //    }
+      //  }
+      //})
+      //.state('tab.chat-detail', {
+      //  url: '/chats/:chatId',
+      //  views: {
+      //    'tab-nearby': {
+      //      templateUrl: 'templates/chat-detail.html',
+      //      controller: 'ChatDetailCtrl'
+      //    }
+      //  }
+      //})
 
       .state('tab.personal', {
         url: '/personal',
