@@ -3,39 +3,100 @@
   <ion-nav-buttons side="left">
     <button class="button button-positive" ng-click="goBack()"><i class="ion-arrow-left-c"></i> 后退</button>
   </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-positive" ng-click="toComment()">查看评价</button>
+  </ion-nav-buttons>
 
   <ion-content>
-    <input placeholder="景点名称"/>
-    <br>
-    <input placeholder="基本信息"/>
-    <br>
-    <input placeholder="详细介绍"/>
-    <br>
+    <div class="page-header">
+      <h1>{{sight.sightName}}
+      </h1>
 
-    <div class="list">
-      <div class="item" ng-repeat="img in images_list">
-        <img ng-src="{{img}}" width="100%">
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          评分：{{sight.score}}
+        </h3>
+      </div>
+      <div class="panel-body">
+        <!--代码开始-->
+        <div id="xzw_starSys">
+          <div id="xzw_starBox">
+            <ul class="star" id="star">
+              <li><a href="javascript:void(0)" title="1" class="one-star">1</a></li>
+              <li><a href="javascript:void(0)" title="2" class="two-stars">2</a></li>
+              <li><a href="javascript:void(0)" title="3" class="three-stars">3</a></li>
+              <li><a href="javascript:void(0)" title="4" class="four-stars">4</a></li>
+              <li><a href="javascript:void(0)" title="5" class="five-stars">5</a></li>
+            </ul>
+            <div class="current-rating" id="showb"></div>
+          </div>
+        </div>
+        <!--代码结束-->
       </div>
     </div>
-    <br>
-    <div>评分：4.5</div>
 
-    <!--代码开始-->
-    <div id="xzw_starSys">
-      <div id="xzw_starBox">
-        <ul class="star" id="star">
-          <li><a href="javascript:void(0)" title="1" class="one-star">1</a></li>
-          <li><a href="javascript:void(0)" title="2" class="two-stars">2</a></li>
-          <li><a href="javascript:void(0)" title="3" class="three-stars">3</a></li>
-          <li><a href="javascript:void(0)" title="4" class="four-stars">4</a></li>
-          <li><a href="javascript:void(0)" title="5" class="five-stars">5</a></li>
-        </ul>
-        <div class="current-rating" id="showb"></div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          简介
+        </h3>
       </div>
-      <!--评价文字-->
-      <div class="description"></div>
+      <div class="panel-body">
+        {{sight.brief}}
+      </div>
     </div>
-    <!--代码结束-->
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          详细介绍
+        </h3>
+      </div>
+      <div class="panel-body">
+        {{sight.description}}
+      </div>
+    </div>
+
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          图册
+        </h3>
+      </div>
+      <div class="panel-body">
+        <table class="table table-bordered">
+          <tbody>
+          <tr ng-repeat="array in sight.img">
+            <td ng-repeat="img in array"><img ng-src="{{img}}" width="100%"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          附加信息 <button ng-click="showToggle()">{{showText}}</button>
+        </h3>
+      </div>
+      <div class="panel-body" ng-show="isShowMore">
+        {{sight.otherInfo}}
+      </div>
+    </div>
+
+
+    <button class="btn btn-link" ng-click="lookVideo()">介绍视频</button>
+
+    <button class="btn btn-link" ng-click="look3D()">3D模型</button>
+
+
+    <button class="btn btn-link" ng-click="reportError()">报告错误信息</button>
 
   </ion-content>
 </ion-view>

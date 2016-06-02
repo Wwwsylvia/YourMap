@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ngCordova', 'ionic', 'rootTabModule', 'mainListModule', 'addNewSightModule', 'sightDetailModule', 'searchHistoryModule', 'mapModule','personalModule','loginModule','registerModule','changeAvatarModule'])
+angular.module('starter', ['ngCordova', 'ionic', 'rootTabModule', 'mainListModule', 'addNewSightModule', 'sightDetailModule', 'searchHistoryModule', 'mapModule','personalModule','loginModule','registerModule','changeAvatarModule','sightCommentModule'])
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -135,9 +135,14 @@ angular.module('starter', ['ngCordova', 'ionic', 'rootTabModule', 'mainListModul
         controller: 'AddNewSightCtrl'
       })
       .state('sightDetail', {
-        url: '/sightDetail?:sightID',
+        url: '/sightDetail?:sightName',
         templateUrl: 'templates/sightDetail.tpl.html',
         controller: 'SightDetailCtrl'
+      })
+      .state('sightComment', {
+        url: '/sightComment?:sightName',
+        templateUrl: 'templates/sightComment.tpl.html',
+        controller: 'SightCommentCtrl'
       })
       .state('login', {
         url: '/login',

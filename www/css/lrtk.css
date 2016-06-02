@@ -3,7 +3,6 @@
 ul,li{list-style:none}
 a{ color:#09f;}
 /*容器*/
-#xzw_starSys{width:400px;border:1px solid #ccc;padding:50px;margin:100px auto}
 #xzw_starBox{position:relative;width:120px;float:left}
 /**/
 #xzw_starSys .description{clear:both;padding:10px 0px}

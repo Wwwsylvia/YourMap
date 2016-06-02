@@ -103,6 +103,9 @@ angular.module('mapModule', [])
 
     // 提示控件 end
 
+
+
+
     // 定义一个控件类,即function
     function lookSightDetail(){
       // 默认停靠位置和偏移量
@@ -127,7 +130,7 @@ angular.module('mapModule', [])
       // 绑定事件,点击一次放大两级
       div.onclick = function(e){
         if (selectedSightID != undefined) {
-          $state.go('sightDetail',{sightID:selectedSightID});
+          $state.go('sightDetail',{sightName:selectedSightID});
         } else {
 
         }
@@ -141,6 +144,9 @@ angular.module('mapModule', [])
     var myDetailCtrl = new lookSightDetail();
     // 添加到地图当中
     map.addControl(myDetailCtrl);
+
+
+
 
     // 点击显示标签 start
     var title ="天安门";
@@ -161,7 +167,7 @@ angular.module('mapModule', [])
       document.getElementById('imgDemo').onload = function () {
         infoWindow.redraw();   //防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
       }
-      selectedSightID = "dd";
+      selectedSightID = "复旦大学";
     });
 
     // 点击显示标签 end
@@ -169,16 +175,29 @@ angular.module('mapModule', [])
 
     if ($stateParams.sightName != undefined){
         map.clearOverlays();    //清除地图上所有覆盖物
-        function myFun() {
-          var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+      var result;
+      function myFun() {
+        result = local.getResults();
+          var pp = result.getPoi(0).point;    //获取第一个智能搜索的结果
           map.centerAndZoom(pp, 18);
           map.addOverlay(new BMap.Marker(pp));    //添加标注
+
+        console.log(result);
+
+        var circle = new BMap.Circle(pp,500,{strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5}); //创建圆
+
+
+        map.addOverlay(circle);
+
         }
 
         var local = new BMap.LocalSearch(map, { //智能搜索
           onSearchComplete: myFun
         });
         local.search($stateParams.sightName);
+
+
+
     }
 
     // 路线规划 start
