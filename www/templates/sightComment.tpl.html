@@ -6,6 +6,132 @@
 
   <ion-content>
     <div id="container" style="height: 300px"></div>
-    <div style="height: 200px"></div>
+    <div style="height: 200px">
+      <ul id="myTab" class="nav nav-tabs">
+        <li id="tab1" ng-click="commentTab()" class="active"><a data-toggle="tab">评论</a></li>
+        <li id="tab2" ng-click="labelTab()"><a data-toggle="tab">添加标签</a></li>
+        <li id="tab3" ng-click="suggestTab()"><a data-toggle="tab">添加建议</a></li>
+        <li id="tab4" ng-click="surveyTab()"><a data-toggle="tab">调查问卷</a></li>
+      </ul>
+
+      <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade {{class1}}" id="tab-comment">
+          <div class="list">
+            <a class="item item-avatar" ng-repeat="item in comments">
+              <img ng-src="{{item.img}}">
+              <h2>{{item.user}}</h2>
+              <p ng-repeat="partgraph in item.content">{{partgraph}}</p>
+            </a>
+          </div>
+
+          <textarea id="comment-input" type="text" class="form-control" ng-model="myCommentText" placeholder="评论不超过50字"></textarea>
+          <br>
+          <button class="btn btn-primary">评价</button>
+          <br>
+        </div>
+        <div class="tab-pane fade {{class2}}" id="tab-label">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                已有标签
+              </h3>
+            </div>
+            <div class="panel-body">
+              <span ng-repeat="item in labels">
+                <span class="label {{labelClass[item]}}">{{labelName[item]}}</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                添加标签
+              </h3>
+            </div>
+            <div class="panel-body">
+              <span ng-repeat="item in labelIndex">
+                <span class="label {{labelClass[item]}}" ng-click="addLabel(item)">{{labelName[item]}}</span>
+              </span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="tab-pane fade {{class3}}" id="tab-suggest">
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                添加建议
+              </h3>
+            </div>
+            <div class="panel-body">
+              <span ng-repeat="item in suggestIndex">
+                <span class="label {{suggestClass[item]}}" ng-click="addSuggest(item)">{{suggestName[item]}}</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                您的建议
+              </h3>
+            </div>
+            <div class="panel-body">
+              <span ng-repeat="item in suggests">
+                <span class="label {{suggestClass[item]}}" ng-click="deleteSuggest(item)">{{suggestName[item]}}</span>
+              </span>
+            </div>
+          </div>
+
+          <br>
+          <button class="button button-small button-positive">
+            提交建议
+          </button>
+
+        </div>
+
+        <div class="tab-pane fade {{class4}}" id="tab-survey">
+          <label >景点分类是否正确</label>
+          <div class="radio">
+            <label ng-click="clickRight()">
+
+              <input type="radio" name="optionsRadios" id="optionsRadios1"
+                     value="option1" checked > 是
+            </label>
+          </div>
+          <div class="radio">
+            <label ng-click="clickError()">
+              <input type="radio" name="optionsRadios" id="optionsRadios2"
+                     value="option2" > 否
+            </label>
+          </div>
+          <label >评分</label>
+          <!--代码开始-->
+          <div id="xzw_starSys">
+            <div id="xzw_starBox">
+              <ul class="star" id="star">
+                <li><a href="javascript:void(0)" title="1" class="one-star">1</a></li>
+                <li><a href="javascript:void(0)" title="2" class="two-stars">2</a></li>
+                <li><a href="javascript:void(0)" title="3" class="three-stars">3</a></li>
+                <li><a href="javascript:void(0)" title="4" class="four-stars">4</a></li>
+                <li><a href="javascript:void(0)" title="5" class="five-stars">5</a></li>
+              </ul>
+              <div class="current-rating" id="showb"></div>
+            </div>
+          </div>
+          <!--代码结束-->
+
+          <br>
+          <br>
+          <br>
+          <button class="button button-small button-positive">
+            提交问卷
+          </button>
+        </div>
+      </div>
+    </div>
   </ion-content>
 </ion-view>

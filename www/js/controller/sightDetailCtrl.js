@@ -93,13 +93,5 @@ angular.module('sightDetailModule',[])
   }
 
 
-  //stars.each(function(i){
-  //  $(stars[i]).click(function(e){
-  //    var n = i+1;
-  //    $("#showb").css({"width":stepW*n});
-  //    descriptionTemp = description[i];
-  //    $(".description").text(description[i]);
-  //    $(this).find('a').blur();
-  //  });
-  //});
+
 }])

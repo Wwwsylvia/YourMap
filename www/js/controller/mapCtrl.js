@@ -184,11 +184,6 @@ angular.module('mapModule', [])
 
         console.log(result);
 
-        var circle = new BMap.Circle(pp,500,{strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5}); //创建圆
-
-
-        map.addOverlay(circle);
-
         }
 
         var local = new BMap.LocalSearch(map, { //智能搜索
@@ -358,44 +353,5 @@ angular.module('mapModule', [])
       local.searchInBounds("景点", map.getBounds());
     }
 
-
-    //map.addEventListener("click", function (e) {
-    //  var point = e.point;
-    //
-    //  var myPopup = $ionicPopup.show({
-    //    template: '',
-    //    title: '要把该地设为景点吗？',
-    //    scope: $scope,
-    //    buttons: [
-    //      {
-    //        text: '忽略',
-    //        onTap: function (e) {
-    //          var json = {"error_code": -1};
-    //          return json;
-    //        }
-    //      },
-    //      {
-    //        text: '<b>是</b>',
-    //        type: 'button-positive',
-    //        onTap: function (e) {
-    //          var json = {"error_code": 0, "content": point};
-    //          return json;
-    //        }
-    //      },
-    //    ]
-    //  });
-    //  myPopup.then(function (res) {
-    //
-    //    console.log('Tapped!', res);
-    //    if (res.error_code == 0) {
-    //      $state.go('newSight', {lng: res.content.lng, lat: res.content.lat});
-    //    }
-    //
-    //  });
-    //  $timeout(function () {
-    //    myPopup.close(); // 30秒后关闭弹窗
-    //  }, 5000);
-    //
-    //});
 
   }])
