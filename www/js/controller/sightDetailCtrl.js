@@ -92,6 +92,17 @@ angular.module('sightDetailModule',[])
     });
   }
 
+  $scope.addToPlan = function() {
+
+  }
+
+  $scope.addToFootprint = function() {
+
+  }
+
+  $scope.addToStar = function(){
+
+  }
 
 
 }])

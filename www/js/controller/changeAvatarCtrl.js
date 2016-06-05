@@ -1,6 +1,7 @@
 /**
  * Created by HF Q on 2016/6/1.
  */
+var myServer = window.localStorage ? localStorage.getItem("serverAddress") : Cookie.read("serverAddress");
 angular.module('changeAvatarModule',[])
 .controller('ChangeAvatarCtrl', function ($ionicNavBarDelegate,$scope, $state,$ionicActionSheet,$cordovaCamera,$cordovaFileTransfer) {
   $scope.goBack = function(){
@@ -58,7 +59,7 @@ angular.module('changeAvatarModule',[])
       .then(function (imageURI) {
         //Success
         $scope.imageSrc = imageURI;
-        $scope.uploadPhoto();
+        //$scope.uploadPhoto();
       }, function (err) {
         //error
       });
@@ -78,7 +79,7 @@ angular.module('changeAvatarModule',[])
       .then(function (imageURI) {
         //Success
         $scope.imageSrc = imageURI;
-        $scope.uploadPhoto();
+        //$scope.uploadPhoto();
       }, function (err) {
         //Error
       });
@@ -87,7 +88,7 @@ angular.module('changeAvatarModule',[])
 
   $scope.uploadPhoto = function() {
     var requestParams = "?callback=JSON_CALLBACK";
-    var server = encodeURI('注意这写的是你的后台请求地址' + requestParams);
+    var server = encodeURI(myServer+'userHeadImgUpload' + requestParams);
     var fileURL = $scope.imageSrc;
     var options = {
       fileKey: "file",//相当于form表单项的name属性

@@ -4,7 +4,7 @@
 
 
 angular.module('sightCommentModule', [])
-  .controller('SightCommentCtrl', ['$scope', '$stateParams', function ($scope, $stateParams) {
+  .controller('SightCommentCtrl', ['$scope', '$stateParams','$ionicNavBarDelegate', function ($scope, $stateParams,$ionicNavBarDelegate) {
     $scope.labelIndex = [0, 1, 2, 3, 4, 5];
     $scope.labelClass = ['label-default', 'label-primary', 'label-success', 'label-info', 'label-warning', 'label-danger'];
     $scope.labelName = ['游乐园', '自然景观', '商城', '人文景观', '美食', '科技馆'];
@@ -14,7 +14,11 @@ angular.module('sightCommentModule', [])
     $scope.suggestClass = ['label-default', 'label-primary', 'label-success', 'label-info', 'label-warning', 'label-danger'];
     $scope.suggestName = ['游乐园', '自然景观', '商城', '人文景观', '美食', '科技馆'];
 
-    var map = new BMap.Map("container");          // 创建地图实例
+    $scope.goBack = function(){
+      $ionicNavBarDelegate.back();
+    }
+
+    var map = new BMap.Map("commentMap");          // 创建地图实例
     var point = new BMap.Point(121.48, 31.22);  // 创建点坐标
     map.centerAndZoom(point, 15);                 // 初始化地图，设置中心点坐标和地图级别
     map.setCurrentCity("上海"); // 设置地图显示的城市 此项是必须设置的

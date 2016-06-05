@@ -5,9 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ngCordova', 'ionic', 'rootTabModule', 'mainListModule', 'addNewSightModule', 'sightDetailModule', 'searchHistoryModule', 'mapModule','personalModule','loginModule','registerModule','changeAvatarModule','sightCommentModule'])
+var app = angular.module('starter', ['ngCordova', 'ngCookies', 'ionic', 'rootTabModule', 'mainListModule', 'addNewSightModule', 'sightDetailModule', 'searchHistoryModule', 'mapModule','personalModule','loginModule','registerModule','changeAvatarModule','sightCommentModule']);
 
-  .run(function ($ionicPlatform) {
+app.run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -21,9 +21,9 @@ angular.module('starter', ['ngCordova', 'ionic', 'rootTabModule', 'mainListModul
         StatusBar.styleDefault();
       }
     });
-  })
+  });
 
-  .config(function ($ionicConfigProvider) {
+app.config(function ($ionicConfigProvider) {
     $ionicConfigProvider.platform.ios.tabs.style('standard');
     $ionicConfigProvider.platform.ios.tabs.position('bottom');
     $ionicConfigProvider.platform.android.tabs.style('standard');
@@ -37,10 +37,10 @@ angular.module('starter', ['ngCordova', 'ionic', 'rootTabModule', 'mainListModul
 
     $ionicConfigProvider.platform.ios.views.transition('ios');
     $ionicConfigProvider.platform.android.views.transition('android');
-  })
+  });
 
 
-  .config(function ($stateProvider, $urlRouterProvider) {
+app.config(function ($stateProvider, $urlRouterProvider) {
 
 
     // Ionic uses AngularUI Router which uses the concept of states
@@ -161,6 +161,75 @@ angular.module('starter', ['ngCordova', 'ionic', 'rootTabModule', 'mainListModul
 
 
   });
+
+app.run(['$rootScope', '$http', '$cookies', function ($rootScope, $http, $cookies) {
+  console.log("reload");
+  $rootScope.isLogin = false;
+  $http.defaults.headers.post['X-CSRFToken'] = $cookies.csrftoken;
+  var server = "http://192.168.1.122:8080/YourMapAdmin/";
+  //var server = "http://139.129.10.20:8080/GuangHuaLive/";
+  if (window.localStorage) {
+    console.log("localStorage ", server);
+    localStorage.setItem("serverAddress", server);
+  } else {
+    console.log("cookie");
+    Cookie.write("serverAddress", server);
+  }
+
+  var isLogin = window.localStorage ? localStorage.getItem("isLogin") : Cookie.read("isLogin");
+
+  if (!(isLogin == "login")){
+    if (window.localStorage) {
+      console.log("localStorage ");
+      localStorage.setItem("isLogin", "offline");
+    } else {
+      console.log("cookie");
+      Cookie.write("isLogin", "offline");
+    }
+  } else {
+    if (window.localStorage) {
+      console.log("localStorage ", "login");
+      localStorage.setItem("isLogin", "login");
+    } else {
+      console.log("cookie");
+      Cookie.write("isLogin", "login");
+    }
+  }
+
+  layer.ready(function () {
+
+  });
+
+}]);
+app.provider('myCSRF', [function () {
+  var headerName = 'X-CSRFToken';
+  var cookieName = 'csrftoken';
+  var allowedMethods = ['GET'];
+
+  this.setHeaderName = function (n) {
+    headerName = n;
+  }
+  this.setCookieName = function (n) {
+    cookieName = n;
+  }
+  this.setAllowedMethods = function (n) {
+    allowedMethods = n;
+  }
+  this.$get = ['$cookies', function ($cookies) {
+    return {
+      'request': function (config) {
+        if (allowedMethods.indexOf(config.method) === -1) {
+          // do something on success
+          config.headers[headerName] = $cookies[cookieName];
+          console.log($cookies.csrftoken);
+        }
+        return config;
+      }
+    }
+  }];
+}]).config(function ($httpProvider) {
+  $httpProvider.interceptors.push('myCSRF');
+});
 
 
 

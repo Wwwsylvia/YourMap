@@ -3,8 +3,15 @@
  */
 angular.module('mapModule', [])
   .controller('MapCtrl', ['$scope', '$ionicPopup', '$timeout', '$interval', '$http', '$state', '$stateParams',function ($scope, $ionicPopup, $timeout, $interval, $http, $state,$stateParams) {
-    var selectedSightID;
+   // var selectedSightID;
+    console.log("in map");
+    console.log(window.map);
+    if (window.map != undefined) {
+      window.location.reload();
+    }
+    console.log(window.map);
     var map = new BMap.Map("container");          // 创建地图实例
+    window.map = map;
     var point = new BMap.Point(121.48, 31.22);  // 创建点坐标
     map.centerAndZoom(point, 15);                 // 初始化地图，设置中心点坐标和地图级别
     map.setCurrentCity("上海"); // 设置地图显示的城市 此项是必须设置的
@@ -23,26 +30,29 @@ angular.module('mapModule', [])
     geolocationControl.addEventListener("locationSuccess", function (e) {
       // 定位成功事件
       console.log(e.addressComponent);
-      locateMe();
+      locateMe(true);
 
     });
 
     var geolocation = new BMap.Geolocation();
     var myPoint = new BMap.Point(121.48, 31.22);
 
-    function locateMe() {
+    function locateMe(forceLocate) {
       geolocation.getCurrentPosition(function (r) {
         if (this.getStatus() == BMAP_STATUS_SUCCESS) {
           var myMarker = new BMap.Marker(r.point);
          // map.clearOverlays();
           map.addOverlay(myMarker);
-          map.panTo(r.point);
+          if ($stateParams.sightName == undefined || forceLocate) {
+            map.panTo(r.point);
+          }
+
           console.log('您的位置：' + r.point.lng + ',' + r.point.lat);
         }
       }, {enableHighAccuracy: true})
     }
 
-    locateMe();
+    locateMe(false);
 
     map.addControl(geolocationControl);
     // 设置定位控件 end
@@ -129,8 +139,8 @@ angular.module('mapModule', [])
       div.style.backgroundColor = "white";
       // 绑定事件,点击一次放大两级
       div.onclick = function(e){
-        if (selectedSightID != undefined) {
-          $state.go('sightDetail',{sightName:selectedSightID});
+        if ($stateParams.sightName != undefined) {
+          $state.go('sightDetail',{sightName:$stateParams.sightName});
         } else {
 
         }
@@ -167,7 +177,7 @@ angular.module('mapModule', [])
       document.getElementById('imgDemo').onload = function () {
         infoWindow.redraw();   //防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
       }
-      selectedSightID = "复旦大学";
+      $stateParams.sightName = "复旦大学";
     });
 
     // 点击显示标签 end

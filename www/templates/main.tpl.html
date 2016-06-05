@@ -1,64 +1,56 @@
 <ion-view view-title="{{title}}">
-    <ion-nav-bar class="bar bar-positive"></ion-nav-bar>
-    <ion-nav-buttons side="left">
-        <div class="btn-group dropdown">
-            <button type="button" class="btn btn-primary dropdown-toggle"
-                    data-toggle="dropdown">
-                排序</span>
-            </button>
-            <ul class="dropdown-menu sort-item" role="menu">
-                <li><a href="#">评分从高到低</a></li>
-                <li><a href="#">评分从低到高</a></li>
-                <li><a href="#">距离从近到远</a></li>
-                <li><a href="#">距离从远到近</a></li>
-                <li><a href="#">评分从高到低</a></li>
-                <li><a href="#">智能排序</a></li>
-            </ul>
-        </div>
+  <ion-nav-bar class="bar bar-positive"></ion-nav-bar>
+  <ion-nav-buttons side="left">
+    <div class="btn-group dropdown">
+      <button type="button" class="btn btn-primary dropdown-toggle"
+              data-toggle="dropdown">
+        排序</span>
+      </button>
+      <ul class="dropdown-menu sort-item" role="menu">
+        <li ng-click="scoreSort(-1)"><a>评分从高到低</a></li>
+        <li ng-click="scoreSort(1)"><a>评分从低到高</a></li>
+        <li ng-click="distanceSort(1)"><a>距离从近到远</a></li>
+        <li ng-click="distanceSort(-1)"><a>距离从远到近</a></li>
+        <li ng-click="defualtSort()"><a>智能排序</a></li>
+      </ul>
+    </div>
 
-    </ion-nav-buttons>
-    <ion-nav-buttons side="right">
-        <button class="button button-icon icon ion-search" ng-click="searchScene()"></button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-icon icon ion-search" ng-click="searchScene()"></button>
 
-    </ion-nav-buttons>
+  </ion-nav-buttons>
 
-    <!--<ion-tabs class="my-sub-header-bar bar bar-subheader tabs-stable">-->
-
-        <!--<ion-tab title="全部" ng-click="sort1()">-->
-
-        <!--</ion-tab>-->
-
-        <!--<ion-tab title="风景区" ng-click="sort2()">-->
-            <!--&lt;!&ndash; 标签 2 内容 &ndash;&gt;-->
-        <!--</ion-tab>-->
-
-        <!--<ion-tab title="游乐园" ng-click="sort3()">-->
-            <!--&lt;!&ndash; 标签 3 内容 &ndash;&gt;-->
-        <!--</ion-tab>-->
-
-    <!--</ion-tabs>-->
-
-  <div class="my-sub-header-bar bar bar-subheader row" style="margin:0px">
-    <button class="col-33 button">全部</button>
-    <button class="col-33 button">风景区</button>
-    <button class="col-33 button">游乐园</button>
-    <div></div>
-  </div>
+  <ion-content>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <label>选择分类</label>
+          <br>
+            <span ng-repeat="item in labelIndex">
+                <span class="label {{labelClass[item]}}" ng-click="addLabel(item)">{{labelName[item]}}</span>
+              </span>
+        </h3>
+      </div>
+      <div class="panel-body">
+          <span class="label label-default">全部</span>
+          <span ng-repeat="item in labels">
+            <span class="label {{labelClass[item]}}" ng-click="deleteLabel(item)">{{labelName[item]}}</span>
+          </span>
+      </div>
+    </div>
 
 
-    <ion-content class="has-subheader">
+    <ion-list>
+      <ion-item class="item-avatar" ng-repeat="item in data" ng-click="toSight(item.name)">
+        {{item.name}}
+        <img ng-src="{{item.url}}">
+        <h2>评分：{{item.score}}</h2>
+        <h2>距离：{{item.distance}}km</h2>
+        <h2>简介：{{item.info}}</h2>
+      </ion-item>
+    </ion-list>
 
 
-        <ion-list>
-            <ion-item class="item-avatar" ng-repeat="item in data">
-                {{item.name}}
-                <img ng-src="{{item.url}}">
-                <h2>评分：{{item.score}}</h2>
-                <h2>距离：{{item.distance}}</h2>
-                <h2>简介：{{item.info}}</h2>
-            </ion-item>
-        </ion-list>
-
-
-    </ion-content>
+  </ion-content>
 </ion-view>
