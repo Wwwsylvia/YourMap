@@ -1,0 +1,18 @@
+<ion-view view-title="3D景观">
+  <ion-nav-bar class="bar bar-positive"></ion-nav-bar>
+  <ion-nav-buttons side="left">
+    <button class="button button-positive" ng-click="goBack()"><i class="ion-arrow-left-c"></i> 后退</button>
+  </ion-nav-buttons>
+
+  <ion-content>
+    <div id="ThreeJS" style="position: absolute; left:0px; top:0px"></div>
+    <script src="lib/webGL/js/three.js"></script>
+    <script src="lib/webGL/js/CanvasRenderer.js"></script>
+    <script src="lib/webGL/js/Projector.js"></script>
+
+    <script src="lib/webGL/js/stats.min.js"></script>
+    <script src="lib/webGL/js/Detector.js"></script>
+    <script src="lib/webGL/js/OrbitControls.js"></script>
+
+  </ion-content>
+</ion-view>

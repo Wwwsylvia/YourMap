@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-var app = angular.module('starter', ['ngCordova', 'ngCookies', 'ionic', 'rootTabModule', 'mainListModule', 'addNewSightModule', 'sightDetailModule', 'searchHistoryModule', 'mapModule','personalModule','loginModule','registerModule','changeAvatarModule','sightCommentModule']);
+var app = angular.module('starter', ['ngCordova', 'ngCookies', 'ionic', 'rootTabModule', 'mainListModule', 'addNewSightModule', 'sightDetailModule', 'searchHistoryModule', 'mapModule','personalModule','loginModule','registerModule','changeAvatarModule','sightCommentModule','show3DModule']);
 
 app.run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -133,6 +133,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         url: '/newSight?:lng:lat',
         templateUrl: 'templates/add_new_sight.tpl.html',
         controller: 'AddNewSightCtrl'
+      })
+      .state('show3DSight', {
+        url: '/show3DSight',
+        templateUrl: 'templates/show_3d_sight.tpl.html',
+        controller: 'Show3DSightCtrl'
       })
       .state('sightDetail', {
         url: '/sightDetail?:sightName',

@@ -53,7 +53,7 @@ angular.module('sightDetailModule',[])
   }
 
   $scope.look3D = function(){
-
+    $state.go('show3DSight');
   }
 
   $scope.reportError = function(){
