@@ -5,29 +5,32 @@
   </ion-nav-buttons>
   <ion-nav-title class="my-view-title">登录Your Map</ion-nav-title>
   <ion-content>
-    <div class="list login-block">
-      <label class="item item-input login-input">
-        <span class="input-label">用户名：</span>
-        <input type="text" placeholder="注册时填写的用户名" ng-model="account">
-      </label>
-      <label class="item item-input login-input">
-        <span class="input-label">密码：</span>
-        <input type="password" placeholder="6-16位英文字母或数字" ng-model="password">
-      </label>
+    <form name="loginForm" novalidate>
+      <div class="list login-block">
+        <label class="item item-input login-input">
+          <span class="input-label">用户名：</span>
+          <input name="loginAccount" type="text" placeholder="注册时填写的用户名" ng-model="account">
+        </label>
+        <label class="item item-input login-input">
+          <span class="input-label">密码：</span>
+          <input name="loginPassword" type="password" placeholder="6-16位英文字母或数字" ng-model="password">
+        </label>
+      </div>
+
+      <div class="padding">
+        <button class="button button-block button-outline button-light login-button" ng-click="login(loginForm)">立即登录</button>
+      </div>
+    </form>
+
+    <div class="padding">
+      <a class="button button-block button-outline button-light login-button weibo-button"><img
+        class="login-button-icon" src="../resources/test/LOGO_32.png">微博账号登录</a>
     </div>
 
     <div class="padding">
-      <button class="button button-block button-outline button-light login-button" ng-click="login()">立即登录</button>
+      <a class="button button-block button-outline button-light login-button wechat-button"><img
+        class="login-button-icon" src="../resources/test/icon32_wx_logo.png">微信账号登录</a>
     </div>
-
-    <div class="padding">
-      <a class="button button-block button-outline button-light login-button weibo-button"><img class="login-button-icon" src="../resources/test/LOGO_32.png">微博账号登录</a>
-    </div>
-
-    <div class="padding">
-      <a class="button button-block button-outline button-light login-button wechat-button"><img class="login-button-icon" src="../resources/test/icon32_wx_logo.png">微信账号登录</a>
-    </div>
-
 
 
   </ion-content>

@@ -3,7 +3,7 @@
  */
 var server = window.localStorage ? localStorage.getItem("serverAddress") : Cookie.read("serverAddress");
 angular.module('loginModule',[])
-.controller('LoginCtrl', function ($scope, $state,$ionicNavBarDelegate,$ionicPopup,$http) {
+.controller('LoginCtrl', ['$scope', '$state','$ionicNavBarDelegate','$ionicPopup','$http',function ($scope, $state,$ionicNavBarDelegate,$ionicPopup,$http) {
   $scope.goBack = function(){
     $ionicNavBarDelegate.back();
   }
@@ -19,10 +19,11 @@ angular.module('loginModule',[])
     });
   };
 
-  $scope.login = function () {
-    var account = $scope.account;
-    var password = $scope.password;
-    if (username == undefined || password == undefined || username == "" || password == "") {
+  $scope.login = function (form) {
+    var account = form.loginAccount.$modelValue;
+    var password = form.loginPassword.$modelValue;
+    console.log(account +" "+password);
+    if (account == undefined || password == undefined || account == "" || password == "") {
       alertMsg("用户名密码不能为空");
       return;
     }
@@ -31,7 +32,7 @@ angular.module('loginModule',[])
       {
         account: account,
         password: password,
-        type:""
+        type:"0"
       },
       {
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
@@ -40,7 +41,15 @@ angular.module('loginModule',[])
         }
       })
       .success(function(response){
-        if (response.error_code == 0) {
+        console.log(response);
+        if (response.error_type == 0) {
+          if (window.localStorage) {
+            console.log("localStorage ");
+            localStorage.setItem("isLogin", "login");
+          } else {
+            console.log("cookie");
+            Cookie.write("isLogin", "login");
+          }
           $state.go('tab.personal');
         } else {
           alertMsg("登录失败，"+response.error_message);
@@ -48,4 +57,4 @@ angular.module('loginModule',[])
       });
 
   }
-});
+}]);

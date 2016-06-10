@@ -54,10 +54,29 @@ angular.module('mainListModule', [])
       }
     }
 
-    //$http.get(server + "sightListGet?type=-1")
-    //  .success(function (response) {
-    //
-    //  })
+    console.log($scope.labels);
+    var json = $scope.labels[0];
+    for (var i = 1; i < $scope.labels.length; i++) {
+      json = json + "," + $scope.labels[i];
+    }
+    if (json == null || json == undefined || json == "") {
+      json = "0,1,2,3,4,5";
+    }
+
+
+    $http.post(server + "sightListGetBySightType",
+      {sightType: json},
+      {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+        transformRequest: function (data) {
+          return $.param(data);
+        }
+      })
+      .success(function (response) {
+        console.log(response);
+      })
+
+
     $scope.data = [{
       "name": "虹桥火车站",
       "score": 4.5,
@@ -133,8 +152,8 @@ angular.module('mainListModule', [])
       $state.go('searchHistory');
     }
 
-    $scope.toSight = function(sightName){
-      $state.go('tab.map',{sightName:sightName});
+    $scope.toSight = function (sightName) {
+      $state.go('tab.map', {sightName: sightName});
     }
   }])
 

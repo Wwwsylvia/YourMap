@@ -1,6 +1,7 @@
 /**
  * Created by HF Q on 2016/5/28.
  */
+var server = window.localStorage ? localStorage.getItem("serverAddress") : Cookie.read("serverAddress");
 angular.module('sightDetailModule',[])
 .controller('SightDetailCtrl',['$scope','$ionicNavBarDelegate','$ionicPopup','$state','$stateParams',function($scope,$ionicNavBarDelegate,$ionicPopup,$state,$stateParams){
   $scope.goBack = function(){
@@ -19,6 +20,7 @@ angular.module('sightDetailModule',[])
 
 
   $scope.sight = {
+    sightId:0,
     sightName:"复旦大学",
     brief:"张江大学五角场校区",
     description:"复旦大学坐落于上海杨浦区五角场，是张江大学的五角场校区",
@@ -93,15 +95,24 @@ angular.module('sightDetailModule',[])
   }
 
   $scope.addToPlan = function() {
+    $http.get(server+"footprintCreate?sightId="+$scope.sight.sightId+"&type=3")
+      .success(function(response){
 
+      });
   }
 
   $scope.addToFootprint = function() {
+    $http.get(server+"footprintCreate?sightId="+$scope.sight.sightId+"&type=1")
+      .success(function(response){
 
+      });
   }
 
   $scope.addToStar = function(){
+    $http.get(server+"footprintCreate?sightId="+$scope.sight.sightId+"&type=2")
+      .success(function(response){
 
+      });
   }
 
 

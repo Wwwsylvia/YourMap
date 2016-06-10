@@ -1,9 +1,10 @@
 /**
  * Created by HF Q on 2016/5/8.
  */
+var server = window.localStorage ? localStorage.getItem("serverAddress") : Cookie.read("serverAddress");
 angular.module('mapModule', [])
-  .controller('MapCtrl', ['$scope', '$ionicPopup', '$timeout', '$interval', '$http', '$state', '$stateParams',function ($scope, $ionicPopup, $timeout, $interval, $http, $state,$stateParams) {
-   // var selectedSightID;
+  .controller('MapCtrl', ['$scope', '$ionicPopup', '$timeout', '$interval', '$http', '$state', '$stateParams', function ($scope, $ionicPopup, $timeout, $interval, $http, $state, $stateParams) {
+    // var selectedSightID;
     console.log("in map");
     console.log(window.map);
     if (window.map != undefined) {
@@ -41,7 +42,7 @@ angular.module('mapModule', [])
       geolocation.getCurrentPosition(function (r) {
         if (this.getStatus() == BMAP_STATUS_SUCCESS) {
           var myMarker = new BMap.Marker(r.point);
-         // map.clearOverlays();
+          // map.clearOverlays();
           map.addOverlay(myMarker);
           if ($stateParams.sightName == undefined || forceLocate) {
             map.panTo(r.point);
@@ -114,10 +115,8 @@ angular.module('mapModule', [])
     // 提示控件 end
 
 
-
-
     // 定义一个控件类,即function
-    function lookSightDetail(){
+    function lookSightDetail() {
       // 默认停靠位置和偏移量
       this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
       this.defaultOffset = new BMap.Size(50, 20);
@@ -128,7 +127,7 @@ angular.module('mapModule', [])
 
     // 自定义控件必须实现自己的initialize方法,并且将控件的DOM元素返回
     // 在本方法中创建个div元素作为控件的容器,并将其添加到地图容器中
-    lookSightDetail.prototype.initialize = function(map){
+    lookSightDetail.prototype.initialize = function (map) {
       // 创建一个DOM元素
       var div = document.createElement("div");
       // 添加文字说明
@@ -138,9 +137,9 @@ angular.module('mapModule', [])
       div.style.border = "1px solid gray";
       div.style.backgroundColor = "white";
       // 绑定事件,点击一次放大两级
-      div.onclick = function(e){
+      div.onclick = function (e) {
         if ($stateParams.sightName != undefined) {
-          $state.go('sightDetail',{sightName:$stateParams.sightName});
+          $state.go('sightDetail', {sightName: $stateParams.sightName});
         } else {
 
         }
@@ -156,16 +155,14 @@ angular.module('mapModule', [])
     map.addControl(myDetailCtrl);
 
 
-
-
     // 点击显示标签 start
-    var title ="天安门";
+    var title = "天安门";
     var info = "天安门坐落在中国北京市中心,故宫的南侧,与天安门广场隔长安街相望,是清朝皇城的大门...";
     var img = "http://app.baidu.com/map/images/tiananmen.jpg";
     var sContent =
-      "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>"+title+"</h4>" +
-      "<img style='float:right;margin:4px' id='imgDemo' src='"+img+"' width='139' height='104' title='天安门'/>" +
-      "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>"+info+"</p>" +
+      "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>" + title + "</h4>" +
+      "<img style='float:right;margin:4px' id='imgDemo' src='" + img + "' width='139' height='104' title='天安门'/>" +
+      "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + info + "</p>" +
       "</div>";
     var point = new BMap.Point(121.48, 31.22);
     var marker = new BMap.Marker(point);
@@ -183,24 +180,24 @@ angular.module('mapModule', [])
     // 点击显示标签 end
 
 
-    if ($stateParams.sightName != undefined){
-        map.clearOverlays();    //清除地图上所有覆盖物
+    if ($stateParams.sightName != undefined) {
+      map.clearOverlays();    //清除地图上所有覆盖物
       var result;
+
       function myFun() {
         result = local.getResults();
-          var pp = result.getPoi(0).point;    //获取第一个智能搜索的结果
-          map.centerAndZoom(pp, 18);
-          map.addOverlay(new BMap.Marker(pp));    //添加标注
+        var pp = result.getPoi(0).point;    //获取第一个智能搜索的结果
+        map.centerAndZoom(pp, 18);
+        map.addOverlay(new BMap.Marker(pp));    //添加标注
 
         console.log(result);
 
-        }
+      }
 
-        var local = new BMap.LocalSearch(map, { //智能搜索
-          onSearchComplete: myFun
-        });
-        local.search($stateParams.sightName);
-
+      var local = new BMap.LocalSearch(map, { //智能搜索
+        onSearchComplete: myFun
+      });
+      local.search($stateParams.sightName);
 
 
     }
@@ -313,20 +310,41 @@ angular.module('mapModule', [])
           center.lng = (start.point.lng + end.point.lng) / 2.0;
           center.lat = (start.point.lat + end.point.lat) / 2.0;
 
+          var lng1, lng2, lat1, lat2;
+          if (start.point.lng > end.point.lng) {
+            lng1 = end.point.lng-0.005;
+            lng2 = start.point.lng+0.005;
+          } else {
+            lng2 = end.point.lng+0.005;
+            lng1 = start.point.lng-0.005;
+          }
+          if (start.point.lat > end.point.lat) {
+            lat1 = end.point.lat+0.005;
+            lat2 = start.point.lat-0.005;
+          } else {
+            lat2 = end.point.lat-0.005;
+            lat1 = start.point.lat+0.005;
+          }
+
+
           var radius = distance / 2;
           console.log(center.lng + " " + center.lat + " " + radius);
-          $http.get("/sightListGet?lng=" + center.lng + "&lat=" + center.lat + "&radius=" + radius)
+          console.log(server + "sightListGet?lng1=" + lng1 + "&lat1=" + lat1 + "&lng2=" + lng2 + "&lat2=" + lat2);
+          $http.get(server + "sightListGet?lng1=" + lng1 + "&lat1=" + lat1 + "&lng2=" + lng2 + "&lat2=" + lat2)
             .success(function (response) {
-              if (response.error_code == 0) {
+              console.log(response);
+              if (response.error_type == 0) {
                 $scope.mySights = response.sightList;
 
                 for (var i = 0; i < $scope.mySights.length; i++) {
                   var sight = $scope.mySights[i];
+
                   var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25), {
                     offset: new BMap.Size(10, 25), // 指定定位位置
                     imageOffset: new BMap.Size(0, 0 - 10 * 25) // 设置图片偏移
                   });
-                  var myMarker = new BMap.Marker(r.point, {icon: myIcon});
+                  var point = new BMap.Point($scope.mySights[i].lng, $scope.mySights[i].lat);
+                  var myMarker = new BMap.Marker(point, {icon: myIcon});
                   map.addOverlay(myMarker);
                 }
               }
@@ -345,7 +363,7 @@ angular.module('mapModule', [])
         if (res == 201) {
           console.log($scope.data.start + " " + $scope.data.end);
           var driving = new BMap.DrivingRoute(map, {
-            renderOptions: {map: map, autoViewport:true},
+            renderOptions: {map: map, autoViewport: true},
             onSearchComplete: searchComplete
           });
           driving.search($scope.data.start, $scope.data.end);
