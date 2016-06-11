@@ -4,7 +4,7 @@
 
 
 angular.module('sightCommentModule', [])
-  .controller('SightCommentCtrl', ['$scope', '$stateParams','$ionicNavBarDelegate', function ($scope, $stateParams,$ionicNavBarDelegate) {
+  .controller('SightCommentCtrl', ['$scope', '$stateParams','$ionicNavBarDelegate','$http',function ($scope, $stateParams,$ionicNavBarDelegate,$http) {
     $scope.labelIndex = [0, 1, 2, 3, 4, 5];
     $scope.labelClass = ['label-default', 'label-primary', 'label-success', 'label-info', 'label-warning', 'label-danger'];
     $scope.labelName = ['游乐园', '自然景观', '商城', '人文景观', '美食', '科技馆'];
@@ -17,6 +17,70 @@ angular.module('sightCommentModule', [])
     $scope.goBack = function(){
       $ionicNavBarDelegate.back();
     }
+
+    //$scope.comments = [{
+    //  "user": "陈公子",
+    //  "img": "http://www.runoob.com/try/demo_source/venkman.jpg",
+    //  "content": "我好饥渴，大家快来上我！"
+    //},{
+    //  "user": "老汤",
+    //  "img": "http://www.runoob.com/try/demo_source/venkman.jpg",
+    //  "content": "我很强！"
+    //},{
+    //  "user": "流流",
+    //  "img": "http://www.runoob.com/try/demo_source/venkman.jpg",
+    //  "content": "蛤？"
+    //},{
+    //  "user": "芒芒",
+    //  "img": "http://www.runoob.com/try/demo_source/venkman.jpg",
+    //  "content": "你们这些渣渣！"
+    //},{
+    //  "user": "海峰",
+    //  "img": "http://www.runoob.com/try/demo_source/venkman.jpg",
+    //  "content": "嘿嘿嘿，巴拉巴拉巴拉超长超长超长超长超长超长超长超长超长超超长超超长超超长超超长超超长超超长超超长超超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长2"
+    //}];
+
+    var splitPartgraph = function(text){
+      var result=[];
+      var count = 0;
+      var ss="";
+      var lineTexts = 20;
+      while (text.length>lineTexts) {
+        ss = text.substring(0,lineTexts)
+        count ++;
+        result[count-1] = ss;
+        text = text.substring(lineTexts,text.length);
+      }
+      count ++;
+      result[count-1] = text;
+      return result;
+    }
+
+
+
+    $http.get(server+"commentListGet?sightId="+$stateParams.sightId+"&commentType=0")
+      .success(function(response){
+          console.log(response);
+        if (response.error_type == 0) {
+          var commentList = response.commentList;
+          $scope.comments=[];
+          for (var i=0;i<commentList.length;i++) {
+            var obj = {};
+            obj.user = commentList[i].user.username;
+            obj.img = commentList[i].user.headImg;
+            obj.content = commentList[i].commentText;
+            $scope.comments[i] = obj;
+          }
+
+          for (var i=0;i<$scope.comments.length;i++){
+            $scope.comments[i].content = splitPartgraph($scope.comments[i].content);
+          }
+          console.log($scope.comments);
+        }
+
+
+      })
+
 
     var map = new BMap.Map("commentMap");          // 创建地图实例
     var point = new BMap.Point(121.48, 31.22);  // 创建点坐标
@@ -95,49 +159,10 @@ angular.module('sightCommentModule', [])
 
     $scope.labels = [0, 1, 2, 3];
 
-    $scope.comments = [{
-      "user": "陈公子",
-      "img": "http://www.runoob.com/try/demo_source/venkman.jpg",
-      "content": "我好饥渴，大家快来上我！"
-    },{
-      "user": "老汤",
-      "img": "http://www.runoob.com/try/demo_source/venkman.jpg",
-      "content": "我很强！"
-    },{
-      "user": "流流",
-      "img": "http://www.runoob.com/try/demo_source/venkman.jpg",
-      "content": "蛤？"
-    },{
-      "user": "芒芒",
-      "img": "http://www.runoob.com/try/demo_source/venkman.jpg",
-      "content": "你们这些渣渣！"
-    },{
-      "user": "海峰",
-      "img": "http://www.runoob.com/try/demo_source/venkman.jpg",
-      "content": "嘿嘿嘿，巴拉巴拉巴拉超长超长超长超长超长超长超长超长超长超超长超超长超超长超超长超超长超超长超超长超超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长2"
-    }];
 
-    console.log($scope.comments[0].content.length);
 
-    var splitPartgraph = function(text){
-      var result=[];
-      var count = 0;
-      var ss="";
-      var lineTexts = 20;
-      while (text.length>lineTexts) {
-        ss = text.substring(0,lineTexts)
-        count ++;
-        result[count-1] = ss;
-        text = text.substring(lineTexts,text.length);
-      }
-      count ++;
-      result[count-1] = text;
-      return result;
-    }
 
-    for (var i=0;i<$scope.comments.length;i++){
-      $scope.comments[i].content = splitPartgraph($scope.comments[i].content);
-    }
+
 
 
     document.getElementById('comment-input').onkeydown = function()
@@ -145,6 +170,27 @@ angular.module('sightCommentModule', [])
       if(this.value.length >= 50)
         this.value = this.value.substring(0,50);
     }
+
+    $scope.addComment = function(){
+      var text = document.getElementById('comment-input').value;
+      if (text != undefined && text != null && text != "") {
+        $.ajax(server + "commentCreate?sightId="+$stateParams.sightId+"&commentType=0&commentText="+text,{
+          type:"GET",
+          xhrFields:{withCredentials: true},
+          crossDomain:true,
+          success:function(response, status, xhr){
+            console.log(response);
+            if(response.error_type == 0){
+              layer.msg("评论成功");
+            }
+          }
+        });
+      } else {
+          layer.msg("评论不能为空");
+      }
+      console.log(text);
+    }
+
     $scope.addLabel = function (type) {
       console.log(type);
       var flag = false;

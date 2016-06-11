@@ -28,33 +28,35 @@ angular.module('loginModule',[])
       return;
     }
 
-    $http.post(server+"userLogin",
-      {
+    $.ajax(server + "userLogin",{
+      type:"POST",
+      data:{
         account: account,
         password: password,
         type:"0"
       },
-      {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-        transformRequest: function (data) {
-          return $.param(data);
-        }
-      })
-      .success(function(response){
+      xhrFields:{withCredentials: true},
+      crossDomain:true,
+      success:function(response, status, xhr){
         console.log(response);
         if (response.error_type == 0) {
           if (window.localStorage) {
-            console.log("localStorage ");
+            console.log("localStorage");
             localStorage.setItem("isLogin", "login");
+            localStorage.setItem("username", response.user.username);
+            localStorage.setItem("headImg", response.user.headImg);
           } else {
             console.log("cookie");
             Cookie.write("isLogin", "login");
+            Cookie.write("username", response.user.username);
+            Cookie.write("headImg", response.user.headImg);
           }
-          $state.go('tab.personal');
+          $ionicNavBarDelegate.back();
         } else {
           alertMsg("登录失败，"+response.error_message);
         }
-      });
+      }
+    });
 
   }
 }]);

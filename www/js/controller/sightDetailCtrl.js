@@ -3,14 +3,27 @@
  */
 var server = window.localStorage ? localStorage.getItem("serverAddress") : Cookie.read("serverAddress");
 angular.module('sightDetailModule',[])
-.controller('SightDetailCtrl',['$scope','$ionicNavBarDelegate','$ionicPopup','$state','$stateParams',function($scope,$ionicNavBarDelegate,$ionicPopup,$state,$stateParams){
+.controller('SightDetailCtrl',['$scope','$ionicNavBarDelegate','$ionicPopup','$state','$stateParams','$http',function($scope,$ionicNavBarDelegate,$ionicPopup,$state,$stateParams,$http){
   $scope.goBack = function(){
     $ionicNavBarDelegate.back();
   }
 
+  alertMsg = function (msg) {
+    var alertPopup = $ionicPopup.alert({
+      title: msg,
+    });
+    alertPopup.then(function (res) {
+    });
+  };
+
   $scope.toComment = function(){
-    $state.go('sightComment',{sightName:$stateParams.sightName});
+    if (!sightExist) {
+      alertMsg('暂无该景点信息！');
+      return;
+    }
+    $state.go('sightComment',{sightName:$stateParams.sightName,sightId:$scope.sight.sightId});
   }
+
 
   var stepW = 24;
   var description = new Array("1分","2分","3分","4分","5分");
@@ -18,25 +31,46 @@ angular.module('sightDetailModule',[])
   var descriptionTemp;
   $("#showb").css("width",0);
 
+  var sightExist = false;
+  $http.get(server+"sightGetBySightName?sightName="+$stateParams.sightName)
+    .success(function(response){
+      console.log(response);
+      var temp = response.sight;
+      $scope.sight = {
+        sightId:0,
+        sightName:$stateParams.sightName,
+        brief:"暂无",
+        description:"暂无",
+        score:0,
+        coverImg:"",
+        img:[],
+        video:"",
+        d3:"",
+        otherInfo:"暂无"
 
-  $scope.sight = {
-    sightId:0,
-    sightName:"复旦大学",
-    brief:"张江大学五角场校区",
-    description:"复旦大学坐落于上海杨浦区五角场，是张江大学的五角场校区",
-    score:3.6,
-    coverImg:"./img/perry.png",
-    img:[['./img/adam.jpg','./img/ben.png','./img/mike.png'],['./img/adam.jpg','./img/ben.png','./img/mike.png'],['./img/adam.jpg','./img/ben.png','./img/mike.png']],
-    video:"",
-    d3:"",
-    otherInfo:"asdfasfdaf"
+      }
+      if (response.error_type == 0) {
+        sightExist = true;
+        $scope.sight.sightId = temp.sightId;
+        $scope.sight.sightName = temp.name;
+        $scope.sight.brief = temp.description;
+        $scope.sight.description = temp.detail;
+        $scope.sight.score = temp.avgScore;
+        $scope.sight.coverImg = temp.mainImg;
+        $scope.sight.img = [];
+        $scope.sight.video = temp.video;
+        $scope.sight.otherInfo = temp.otherInfo;
+      }
 
-  }
+      var n = $scope.sight.score;
+      if (n>5) n=5;
+      console.log(n);
+      $("#showb").css({"width":stepW*n});
 
-  var n = $scope.sight.score;
-  if (n>5) n=5;
-  console.log(n);
-  $("#showb").css({"width":stepW*n});
+    });
+
+
+
 
   $scope.isShowMore = false;
   $scope.showText = "显示";
@@ -95,24 +129,48 @@ angular.module('sightDetailModule',[])
   }
 
   $scope.addToPlan = function() {
-    $http.get(server+"footprintCreate?sightId="+$scope.sight.sightId+"&type=3")
-      .success(function(response){
-
-      });
+    if (!sightExist) {
+      alertMsg('暂无该景点信息！');
+      return;
+    }
+    $.ajax(server + "footprintCreate?sightId="+$scope.sight.sightId+"&footprintType=3",{
+      type:"GET",
+      xhrFields:{withCredentials: true},
+      crossDomain:true,
+      success:function(response, status, xhr){
+        console.log(response);
+      }
+    });
   }
 
   $scope.addToFootprint = function() {
-    $http.get(server+"footprintCreate?sightId="+$scope.sight.sightId+"&type=1")
-      .success(function(response){
-
-      });
+    if (!sightExist) {
+      alertMsg('暂无该景点信息！');
+      return;
+    }
+    $.ajax(server + "footprintCreate?sightId="+$scope.sight.sightId+"&footprintType=1",{
+      type:"GET",
+      xhrFields:{withCredentials: true},
+      crossDomain:true,
+      success:function(response, status, xhr){
+        console.log(response);
+      }
+    });
   }
 
   $scope.addToStar = function(){
-    $http.get(server+"footprintCreate?sightId="+$scope.sight.sightId+"&type=2")
-      .success(function(response){
-
-      });
+    if (!sightExist) {
+      alertMsg('暂无该景点信息！');
+      return;
+    }
+    $.ajax(server + "footprintCreate?sightId="+$scope.sight.sightId+"&footprintType=2",{
+      type:"GET",
+      xhrFields:{withCredentials: true},
+      crossDomain:true,
+      success:function(response, status, xhr){
+        console.log(response);
+      }
+    });
   }
 
 

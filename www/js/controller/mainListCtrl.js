@@ -3,14 +3,29 @@
  */
 
 var server = window.localStorage ? localStorage.getItem("serverAddress") : Cookie.read("serverAddress");
-angular.module('mainListModule', [])
-  .controller('MainListCtrl', ['$scope', '$state', '$http', function ($scope, $state, $http) {
+angular.module('mainListModule', ['utilsModule'])
+  .controller('MainListCtrl', ['$scope', '$state', '$http', 'DistanceService', function ($scope, $state, $http, DistanceService) {
     $scope.title = '首页';
     var sortType = 0;
     var type = -1;
     $scope.labelIndex = [0, 1, 2, 3, 4, 5, 6];
     $scope.labelClass = ['label-default', 'label-primary', 'label-success', 'label-info', 'label-warning', 'label-danger', 'label-default'];
     $scope.labelName = ['游乐园', '自然景观', '商城', '人文景观', '美食', '科技馆', '全部'];
+
+    var geolocation = new BMap.Geolocation();
+    var myPoint = new BMap.Point(121.48789949, 31.24916171);
+
+    var located = false;
+
+    setInterval(function () {
+      geolocation.getCurrentPosition(function (r) {
+        if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+          myPoint = r.point;
+          located = true;
+          //console.log('您的位置：' + r.point.lng + ',' + r.point.lat);
+        }
+      }, {enableHighAccuracy: true})
+    },1000);
 
 
     var compare = function (x, y) {
@@ -25,6 +40,7 @@ angular.module('mainListModule', [])
 
       if (type == 6) {
         $scope.labels = [0, 1, 2, 3, 4, 5];
+        getSightList();
         return;
       }
 
@@ -37,6 +53,7 @@ angular.module('mainListModule', [])
       }
       if (!flag) {
         $scope.labels[$scope.labels.length] = type;
+        getSightList();
       }
     }
 
@@ -52,6 +69,7 @@ angular.module('mainListModule', [])
           break;
         }
       }
+      getSightList();
     }
 
     console.log($scope.labels);
@@ -63,57 +81,84 @@ angular.module('mainListModule', [])
       json = "0,1,2,3,4,5";
     }
 
-
-    $http.post(server + "sightListGetBySightType",
-      {sightType: json},
-      {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-        transformRequest: function (data) {
-          return $.param(data);
-        }
-      })
-      .success(function (response) {
-        console.log(response);
-      })
-
-
     $scope.data = [{
       "name": "虹桥火车站",
       "score": 4.5,
       "url": "http://www.runoob.com/try/demo_source/stantz.jpg",
       "distance": 5,
+      "distanceText":"5km",
       "info": "购物街"
     }, {
       "name": "南京东路",
       "score": 4.5,
       "url": "http://www.runoob.com/try/demo_source/stantz.jpg",
       "distance": 66,
+      "distanceText":"66km",
       "info": "购物街"
     }, {
       "name": "复旦大学",
       "score": 3.5,
       "url": "http://www.runoob.com/try/demo_source/stantz.jpg",
       "distance": 25,
+      "distanceText":"25km",
       "info": "购物街"
     }, {
       "name": "南京东路",
       "score": 5.0,
       "url": "http://www.runoob.com/try/demo_source/stantz.jpg",
       "distance": 11,
+      "distanceText":"11km",
       "info": "购物街"
     }, {
       "name": "张江高科",
       "score": 1.5,
       "url": "http://www.runoob.com/try/demo_source/stantz.jpg",
       "distance": 34,
+      "distanceText":"34km",
       "info": "购物街"
     }, {
       "name": "南京东路",
       "score": 2.5,
       "url": "http://www.runoob.com/try/demo_source/stantz.jpg",
       "distance": 10,
+      "distanceText":"10km",
       "info": "购物街"
     },];
+
+    var getSightList = function(){
+      console.log("getting");
+      if(!located) {
+        setTimeout(getSightList,1000);
+      } else {
+        $http.get(server + "sightListGetBySightType?sightType="+json)
+          .success(function (response) {
+            console.log(response);
+            if (response.error_type == 0) {
+              var list = response.sightList;
+              $scope.data = [];
+              for (var i=0;i<list.length;i++) {
+                var obj = {};
+                obj.name = list[i].name;
+                obj.score = list[i].avgScore;
+                obj.url = list[i].mainImg;
+                obj.distance = DistanceService.calcDistance(myPoint.lng,myPoint.lat,list[i].lng,list[i].lat);
+                if (obj.distance>1000) {
+                  obj.distanceText = (obj.distance/1000).toFixed(2)+"km";
+                } else {
+                  obj.distanceText = obj.distance.toFixed(0) + "m";
+                }
+                obj.info = list[i].description;
+                $scope.data[i] = obj;
+              }
+            }
+          })
+      }
+    }
+
+    getSightList();
+
+
+
     $scope.defualtSort = function () {
       for (var i = 0; i < $scope.data.length; i++) {
         for (var j = i; j < $scope.data.length; j++) {

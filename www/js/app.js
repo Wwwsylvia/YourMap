@@ -83,25 +83,6 @@ app.config(function ($stateProvider, $urlRouterProvider) {
       // Each tab has its own nav history stack:
 
 
-      //.state('tab.nearby', {
-      //  url: '/chats',
-      //  views: {
-      //    'tab-nearby': {
-      //      templateUrl: 'templates/tab-chats.html',
-      //      controller: 'ChatsCtrl'
-      //    }
-      //  }
-      //})
-      //.state('tab.chat-detail', {
-      //  url: '/chats/:chatId',
-      //  views: {
-      //    'tab-nearby': {
-      //      templateUrl: 'templates/chat-detail.html',
-      //      controller: 'ChatDetailCtrl'
-      //    }
-      //  }
-      //})
-
       .state('tab.personal', {
         url: '/personal',
         views: {
@@ -116,13 +97,6 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         url: '/register',
         templateUrl: 'templates/register.tpl.html',
         controller: 'RegisterCtrl'
-        // url: '/register',
-        // views: {
-        //   'register': {
-        //     templateUrl: 'templates/register.tpl.html',
-        //     controller: 'RegisterCtrl'
-        //   }
-        // }
       })
       .state('searchHistory', {
         url: '/searchHistory',
@@ -145,7 +119,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         controller: 'SightDetailCtrl'
       })
       .state('sightComment', {
-        url: '/sightComment?:sightName',
+        url: '/sightComment?:sightName:sightId',
         templateUrl: 'templates/sightComment.tpl.html',
         controller: 'SightCommentCtrl'
       })

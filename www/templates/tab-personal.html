@@ -3,13 +3,13 @@
   <ion-nav-title class="my-view-title">我</ion-nav-title>
   <ion-content>
     <div class="personal-avatar-block">
-      <img class="personal-avatar-img" src="../resources/test/head.png" ng-click="changeState('changeAvatar')">
-      <span class="personal-avatar-name">尊贵的测试人员</span>
+      <img id="headView" class="personal-avatar-img" src="../resources/test/head.png" ng-click="changeState('changeAvatar')">
+      <span id="nameText" class="personal-avatar-name">未登录</span>
       <div class="personal-avatar-buttons-block">
         <a class="personal-avatar-button" ui-sref="register" >注册</a>
         |
         <a class="personal-avatar-button" ui-sref="login">登录</a>
-        <!--<button class="personal-avatar-button">注册</button>-->
+        <button id="logoutBtn" class="personal-avatar-button-logout" ng-click="logout()">注销</button>
         <!--<button class="personal-avatar-button">登录</button>-->
       </div>
     </div>
