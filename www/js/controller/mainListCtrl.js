@@ -12,6 +12,47 @@ angular.module('mainListModule', ['utilsModule'])
     $scope.labelClass = ['label-default', 'label-primary', 'label-success', 'label-info', 'label-warning', 'label-danger', 'label-default'];
     $scope.labelName = ['游乐园', '自然景观', '商城', '人文景观', '美食', '科技馆', '全部'];
 
+
+    //$.ajax({
+    //  type : "get",
+    //  async:false,
+    //  url : "http://192.168.1.120:8080/Adweb/userLogin.do?jsonp=callbackfunction",
+    //  dataType : "jsonp",//数据类型为jsonp
+    //  jsonp: "callback",//服务端用于接收callback调用的function名的参数
+    //  jsonpCallback: "getMM",
+    //  success : function(data){
+    //    console.log(data.RESULTSET);
+    //    //$("#showcontent").text("Result:"+data.result)
+    //  },
+    //  error:function(error){
+    //    console.log(error);
+    //  }
+    //});
+
+
+    var url = "http://192.168.1.120:8080/Adweb/userLogin.do?jsonp=callbackfunction";
+    var script = document.createElement('script');
+    script.setAttribute('src', url);  //load javascript
+    document.getElementsByTagName('head')[0].appendChild(script);
+
+    //回调函数
+    function callbackfunction(data){
+      var html=JSON.stringify(data.RESULTSET);
+      alert(html);
+    }
+
+    //function getMM(data) {
+    //  console.log(data);
+    //  //alert("data: " + data);
+    //}
+    //var url ="http://192.168.1.120:8080/newFile.js";
+    //// 动态插入脚本
+    //var script = document.createElement('script');
+    //script.setAttribute('src', url);
+    //// 加载script
+    //document.getElementsByTagName('head')[0].appendChild(script);
+   // getMM("X");
+
     var geolocation = new BMap.Geolocation();
     var myPoint = new BMap.Point(121.48789949, 31.24916171);
 

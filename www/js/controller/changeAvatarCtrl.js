@@ -3,7 +3,7 @@
  */
 var myServer = window.localStorage ? localStorage.getItem("serverAddress") : Cookie.read("serverAddress");
 angular.module('changeAvatarModule',[])
-.controller('ChangeAvatarCtrl', function ($ionicNavBarDelegate,$scope, $state,$ionicActionSheet,$cordovaCamera,$cordovaFileTransfer) {
+.controller('ChangeAvatarCtrl', function ($ionicNavBarDelegate,$scope, $state,$ionicActionSheet,$cordovaCamera,$cordovaFileTransfer,$cordovaImagePicker) {
   $scope.goBack = function(){
     $ionicNavBarDelegate.back();
   }
@@ -11,28 +11,28 @@ angular.module('changeAvatarModule',[])
     $state.go(path);
   };
 
-  // $scope.imgSrc = "../resources/test/head.png";
-
-  $scope.addPhoto = function () {
+  // "添加附件"Event
+  $scope.addPhoto = function() {
+    console.log("open");
+    //nonePopover();
     $ionicActionSheet.show({
-      cancelOnStateChange: true,
-      cssClass: 'actions_s',
-      titleText: "图片来源",
       buttons: [
-        {text: '拍照'},
-        {text: '图库'}
+        { text: '相机' },
+        { text: '图库' }
       ],
-      cancelText: '取消',
-      cancel: function () {
+      cancelText: '关闭',
+      cancel: function() {
         return true;
       },
-      buttonClicked: function (index) {
-        switch (index) {
-          case 0:
-            $scope.takePhoto();
+      buttonClicked: function(index) {
+
+        switch (index){
+
+          case 0:appendByCamera();
             break;
           case 1:
-            $scope.pickImage();
+
+            pickImage();
             break;
           default:
             break;
@@ -40,50 +40,31 @@ angular.module('changeAvatarModule',[])
         return true;
       }
     });
-  };
+  }
+
+
+  //image picker
+  var pickImage = function () {
 
 
 
-
-  $scope.takePhoto = function () {
     var options = {
-      quality: 100,
-      destinationType: Camera.DestinationType.FILE_URI,//Choose the format of the return value.
-      sourceType: Camera.PictureSourceType.CAMERA,//资源类型：CAMERA打开系统照相机；PHOTOLIBRARY打开系统图库
-      targetWidth: 300,//头像宽度
-      targetHeight: 300//头像高度
+      maximumImagesCount: 1,
+      width: 800,
+      height: 800,
+      quality: 80
     };
 
+    $cordovaImagePicker.getPictures(options)
+      .then(function (results) {
 
-    $cordovaCamera.getPicture(options)
-      .then(function (imageURI) {
-        //Success
-        $scope.imageSrc = imageURI;
-        //$scope.uploadPhoto();
-      }, function (err) {
-        //error
+        $scope.imageSrc=results[0];
+
+      }, function (error) {
+        // error getting photos
       });
-  };
 
-
-  $scope.pickImage = function () {
-    var options = {
-      quality: 100,
-      destinationType: Camera.DestinationType.FILE_URI,//Choose the format of the return value.
-      sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM,//资源类型：CAMERA打开系统照相机；PHOTOLIBRARY打开系统图库
-      targetWidth: 300,//头像宽度
-      targetHeight: 300//头像高度
-    };
-
-    $cordovaCamera.getPicture(options)
-      .then(function (imageURI) {
-        //Success
-        $scope.imageSrc = imageURI;
-        //$scope.uploadPhoto();
-      }, function (err) {
-        //Error
-      });
-  };
+  }
 
 
   $scope.uploadPhoto = function() {
@@ -91,7 +72,7 @@ angular.module('changeAvatarModule',[])
     var server = encodeURI(myServer+'userHeadImgUpload' + requestParams);
     var fileURL = $scope.imageSrc;
     var options = {
-      fileKey: "file",//相当于form表单项的name属性
+      fileKey: "headImg",//相当于form表单项的name属性
       fileName: fileURL.substr(fileURL.lastIndexOf('/') + 1),
       mimeType: "image/jpeg"
     };
