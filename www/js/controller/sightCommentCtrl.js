@@ -58,28 +58,7 @@ angular.module('sightCommentModule', [])
 
 
 
-    $http.get(server+"commentListGet?sightId="+$stateParams.sightId+"&commentType=0")
-      .success(function(response){
-          console.log(response);
-        if (response.error_type == 0) {
-          var commentList = response.commentList;
-          $scope.comments=[];
-          for (var i=0;i<commentList.length;i++) {
-            var obj = {};
-            obj.user = commentList[i].user.username;
-            obj.img = commentList[i].user.headImg;
-            obj.content = commentList[i].commentText;
-            $scope.comments[i] = obj;
-          }
 
-          for (var i=0;i<$scope.comments.length;i++){
-            $scope.comments[i].content = splitPartgraph($scope.comments[i].content);
-          }
-          console.log($scope.comments);
-        }
-
-
-      })
 
 
     var map = new BMap.Map("commentMap");          // 创建地图实例
@@ -157,19 +136,36 @@ angular.module('sightCommentModule', [])
       $scope.class4 = "in active";
     }
 
-    $scope.labels = [0, 1, 2, 3];
-
-
-
-
-
-
-
     document.getElementById('comment-input').onkeydown = function()
     {
       if(this.value.length >= 50)
         this.value = this.value.substring(0,50);
     }
+
+
+
+    $http.get(server+"commentListGet?sightId="+$stateParams.sightId+"&commentType=0")
+      .success(function(response){
+        console.log(response);
+        if (response.error_type == 0) {
+          var commentList = response.commentList;
+          $scope.comments=[];
+          for (var i=0;i<commentList.length;i++) {
+            var obj = {};
+            obj.user = commentList[i].user.username;
+            obj.img = commentList[i].user.headImg;
+            obj.content = commentList[i].commentText;
+            $scope.comments[i] = obj;
+          }
+
+          for (var i=0;i<$scope.comments.length;i++){
+            $scope.comments[i].content = splitPartgraph($scope.comments[i].content);
+          }
+          console.log($scope.comments);
+        }
+
+
+      })
 
     $scope.addComment = function(){
       var text = document.getElementById('comment-input').value;
@@ -181,6 +177,13 @@ angular.module('sightCommentModule', [])
           success:function(response, status, xhr){
             console.log(response);
             if(response.error_type == 0){
+              var obj = {};
+              obj.user = response.comment.user.username;
+              obj.img = response.comment.user.headImg;
+              obj.content = response.comment.commentText;
+
+              $scope.comments[$scope.comments.length] = obj;
+              $scope.comments[$scope.comments.length-1].content = splitPartgraph($scope.comments[$scope.comments.length-1].content);
               layer.msg("评论成功");
             }
           }
@@ -190,6 +193,24 @@ angular.module('sightCommentModule', [])
       }
       console.log(text);
     }
+
+    $scope.labels = [];
+
+    $.ajax(server + "labelListGetBySightId?sightId="+$stateParams.sightId,{
+      type:"GET",
+      xhrFields:{withCredentials: true},
+      crossDomain:true,
+      success:function(response, status, xhr){
+        console.log("labelList ");
+        console.log(response);
+        if(response.error_type == 0){
+          $scope.labels = [];
+          for (var i=0;i<response.labelList.length;i++) {
+            $scope.labels[i] = response.labelList[i].type;
+          }
+        }
+      }
+    });
 
     $scope.addLabel = function (type) {
       console.log(type);
@@ -202,11 +223,37 @@ angular.module('sightCommentModule', [])
       }
       if (!flag) {
         $scope.labels[$scope.labels.length] = type;
+        $.ajax(server + "labelCreate?sightId="+$stateParams.sightId+"&type="+type,{
+          type:"GET",
+          xhrFields:{withCredentials: true},
+          crossDomain:true,
+          success:function(response, status, xhr){
+            console.log(response);
+            if(response.error_type == 0){
+              layer.msg("添加标签成功!");
+            }
+          }
+        });
       }
     }
 
 
     $scope.suggests = [];
+    $.ajax(server + "suggestionListGetByUser?sightId="+$stateParams.sightId,{
+      type:"GET",
+      xhrFields:{withCredentials: true},
+      crossDomain:true,
+      success:function(response, status, xhr){
+        console.log("suggestionList ");
+        console.log(response);
+        if(response.error_type == 0){
+          $scope.suggests = [];
+          for (var i=0;i<response.suggestionList.length;i++) {
+            $scope.suggests[i] = response.suggestionList[i].type;
+          }
+        }
+      }
+    });
     $scope.addSuggest = function (type) {
       console.log(type);
       var flag = false;
@@ -235,6 +282,42 @@ angular.module('sightCommentModule', [])
       }
     }
 
+    $scope.submitSuggest = function(){
+      var flag = false;
+      for (var i=0;i<$scope.suggests.length;i++) {
+        $.ajax(server + "suggestionCreate?sightId="+$stateParams.sightId+"&type="+$scope.suggests[i],{
+          type:"GET",
+          xhrFields:{withCredentials: true},
+          crossDomain:true,
+          success:function(response, status, xhr){
+            console.log(response);
+            if(response.error_type == 0){
+              flag = true;
+            }
+          }
+        });
+      }
+      var count = 0;
+      var interval = setInterval(function(){
+        if (count == 3) {
+          clearInterval(interval);
+          if (flag) {
+            layer.msg("建议成功");
+          } else {
+            layer.msg("建议失败");
+          }
+          return;
+        }
+        console.log(flag);
+        if (flag) {
+          layer.msg("建议成功");
+          clearInterval(interval);
+          return;
+        }
+        count++;
+      },1000)
+
+    }
 
 
 
@@ -261,6 +344,25 @@ angular.module('sightCommentModule', [])
         console.log(n);
       });
     });
+
+    $scope.submitSurvey = function(){
+      if (n == 0) {
+        layer.msg("请评分！");
+        return;
+      }
+      $.ajax(server + "scoreCreate?sightId="+$stateParams.sightId+"&score="+n,{
+        type:"GET",
+        xhrFields:{withCredentials: true},
+        crossDomain:true,
+        success:function(response, status, xhr){
+          console.log(response);
+          if(response.error_type == 0){
+            layer.msg("提交成功");
+          }
+        }
+      });
+    }
+
   }]);
 
 

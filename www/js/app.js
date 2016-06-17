@@ -179,6 +179,8 @@ app.run(['$rootScope', '$http', '$cookies', function ($rootScope, $http, $cookie
 
   });
 
+  alert(window.location.host);
+
 }]);
 app.provider('myCSRF', [function () {
   var headerName = 'X-CSRFToken';

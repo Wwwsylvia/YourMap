@@ -24,7 +24,8 @@
             </a>
           </div>
 
-          <textarea id="comment-input" type="text" class="form-control" ng-model="myCommentText" placeholder="评论不超过50字"></textarea>
+          <textarea id="comment-input" type="text" class="form-control" ng-model="myCommentText"
+                    placeholder="评论不超过50字"></textarea>
           <br>
           <button class="btn btn-primary" ng-click="addComment()">评价</button>
           <br>
@@ -87,28 +88,28 @@
           </div>
 
           <br>
-          <button class="button button-small button-positive">
+          <button class="button button-small button-positive" ng-click="submitSuggest()">
             提交建议
           </button>
 
         </div>
 
         <div class="tab-pane fade {{class4}}" id="tab-survey">
-          <label >景点分类是否正确</label>
+          <label>景点分类是否正确</label>
           <div class="radio">
             <label ng-click="clickRight()">
 
               <input type="radio" name="optionsRadios" id="optionsRadios1"
-                     value="option1" checked > 是
+                     value="option1" checked> 是
             </label>
           </div>
           <div class="radio">
             <label ng-click="clickError()">
               <input type="radio" name="optionsRadios" id="optionsRadios2"
-                     value="option2" > 否
+                     value="option2"> 否
             </label>
           </div>
-          <label >评分</label>
+          <label>评分</label>
           <!--代码开始-->
           <div id="xzw_starSys">
             <div id="xzw_starBox">
@@ -127,7 +128,7 @@
           <br>
           <br>
           <br>
-          <button class="button button-small button-positive">
+          <button class="button button-small button-positive" ng-click="submitSurvey()">
             提交问卷
           </button>
         </div>
