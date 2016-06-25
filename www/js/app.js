@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-var app = angular.module('starter', ['ngCordova', 'ngCookies', 'ionic', 'rootTabModule', 'mainListModule', 'addNewSightModule', 'sightDetailModule', 'searchHistoryModule', 'mapModule','personalModule','loginModule','registerModule','changeAvatarModule','sightCommentModule','show3DModule']);
+var app = angular.module('starter', ['ngCordova', 'ngCookies', 'ionic', 'rootTabModule', 'mainListModule', 'addNewSightModule', 'sightDetailModule', 'searchHistoryModule', 'mapModule','personalModule','loginModule','registerModule','changeAvatarModule','sightCommentModule','show3DModule','footprintListModule']);
 
 app.run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -113,6 +113,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         templateUrl: 'templates/show_3d_sight.tpl.html',
         controller: 'Show3DSightCtrl'
       })
+      .state('footprint', {
+        url: '/footprint?:footprintType',
+        templateUrl: 'templates/footprint.tpl.html',
+        controller: 'footprintListCtrl'
+      })
       .state('sightDetail', {
         url: '/sightDetail?:sightName',
         templateUrl: 'templates/sightDetail.tpl.html',
@@ -178,8 +183,6 @@ app.run(['$rootScope', '$http', '$cookies', function ($rootScope, $http, $cookie
   layer.ready(function () {
 
   });
-
-  alert(window.location.host);
 
 }]);
 app.provider('myCSRF', [function () {

@@ -43,4 +43,26 @@ angular.module('personalModule',[])
         }
       });
     }
+
+    $scope.toFootprint = function(){
+      $state.go('footprint',{footprintType: 1});
+    }
+
+    $scope.toPlan = function(){
+      $state.go('footprint',{footprintType: 3});
+    }
+
+    $scope.toStar = function(){
+      $state.go('footprint',{footprintType: 2});
+    }
+
+    $scope.share = function(){
+
+    }
+
+    $scope.abouts = function(){
+
+    }
+
+
   })

@@ -1,0 +1,25 @@
+<ion-view view-title="{{title}}">
+  <ion-nav-bar class="bar bar-positive"></ion-nav-bar>
+  <ion-nav-buttons side="left">
+    <button class="button button-positive" ng-click="goBack()"><i class="ion-arrow-left-c"></i> 后退</button>
+  </ion-nav-buttons>
+
+  <ion-content>
+
+    <div id="footprintMap" style="height: 300px"></div>
+    <div style="height: 200px">
+      <ion-list>
+        <ion-item class="item-avatar" ng-repeat="item in data">
+          {{item.name}}
+          <img ng-src="{{item.url}}">
+          <h2>评分：{{item.score}}</h2>
+          <span class="label label-primary" ng-click="toSight(item.name)">查看详情</span>
+          <span class="label label-danger" ng-click="delete(item.name)">删除</span>
+        </ion-item>
+
+      </ion-list>
+    </div>
+
+
+  </ion-content>
+</ion-view>
