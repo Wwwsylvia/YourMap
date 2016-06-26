@@ -169,7 +169,7 @@ angular.module('mainListModule', ['utilsModule'])
     var getSightList = function(){
       console.log("getting");
       if(!located) {
-        setTimeout(getSightList,1000);
+        setTimeout(getSightList,100);
       } else {
         $http.get(server + "sightListGetBySightType?sightType="+json)
           .success(function (response) {

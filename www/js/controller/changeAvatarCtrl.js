@@ -1,93 +1,78 @@
 /**
  * Created by HF Q on 2016/6/1.
  */
-var myServer = window.localStorage ? localStorage.getItem("serverAddress") : Cookie.read("serverAddress");
-angular.module('changeAvatarModule',[])
-.controller('ChangeAvatarCtrl', function ($ionicNavBarDelegate,$scope, $state,$ionicActionSheet,$cordovaCamera,$cordovaFileTransfer,$cordovaImagePicker) {
-  $scope.goBack = function(){
-    $ionicNavBarDelegate.back();
-  }
-  $scope.changeState = function (path) {
-    $state.go(path);
-  };
-
-  // "添加附件"Event
-  $scope.addPhoto = function() {
-    console.log("open");
-    //nonePopover();
-    $ionicActionSheet.show({
-      buttons: [
-        { text: '相机' },
-        { text: '图库' }
-      ],
-      cancelText: '关闭',
-      cancel: function() {
-        return true;
-      },
-      buttonClicked: function(index) {
-
-        switch (index){
-
-          case 0:appendByCamera();
-            break;
-          case 1:
-
-            pickImage();
-            break;
-          default:
-            break;
+var server = window.localStorage ? localStorage.getItem("serverAddress") : Cookie.read("serverAddress");
+angular.module('changeAvatarModule', [])
+  .controller('ChangeAvatarCtrl', function ($ionicNavBarDelegate, $scope, $state, $ionicActionSheet, $cordovaCamera, $cordovaFileTransfer, $cordovaImagePicker) {
+    $scope.goBack = function () {
+      $ionicNavBarDelegate.back();
+    }
+    $scope.changeState = function (path) {
+      $state.go(path);
+    };
+    var image_file;
+    var head_changed_flag = false;
+    previewVideoCover = function () {
+      var file = document.getElementById("video-cover-file").files[0];
+      if (file) {
+        if (file.type.substring(0, 5) == "image") {
+          head_changed_flag = true;
+          image_file = file;
+          var reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = function (e) {
+            var urlData = this.result;
+            document.getElementById("video-cover-img").setAttribute("src", urlData);
+          }
         }
-        return true;
+        else {
+          alert("不要调皮!封面只能是图片！");
+        }
       }
-    });
-  }
-
-
-  //image picker
-  var pickImage = function () {
-
-
-
-    var options = {
-      maximumImagesCount: 1,
-      width: 800,
-      height: 800,
-      quality: 80
     };
+    // "添加附件"Event
+    $scope.addPhoto = function () {
+      $('#video-cover-file').trigger('click');
+    }
 
-    $cordovaImagePicker.getPictures(options)
-      .then(function (results) {
+    $scope.uploadPhoto = function () {
+      var coverImg = image_file;
+      var formData = new FormData();
+      formData.append("headImg", coverImg);
 
-        $scope.imageSrc=results[0];
+      $.ajax({
+        url: server + "userHeadImgUpload",
+        type: 'POST',
+        data: formData,
 
-      }, function (error) {
-        // error getting photos
+        /**
+         * 必须false才会避开jQuery对 formdata 的默认处理
+         * XMLHttpRequest会对 formdata 进行正确的处理
+         */
+        processData: false,
+        /**
+         *必须false才会自动加上正确的Content-Type
+         */
+        contentType: false,
+        xhrFields: {withCredentials: true},
+        crossDomain: true,
+        success: function (response) {
+          console.log(response);
+          if (response.error_type == 0) {
+            layer.msg("修改成功");
+            if (window.localStorage) {
+              console.log("localStorage");
+
+              localStorage.setItem("headImg", response.url);
+            } else {
+              console.log("cookie");
+
+              Cookie.write("headImg", response.url);
+            }
+          }
+        }
       });
-
-  }
-
-
-  $scope.uploadPhoto = function() {
-    var requestParams = "?callback=JSON_CALLBACK";
-    var server = encodeURI(myServer+'userHeadImgUpload' + requestParams);
-    var fileURL = $scope.imageSrc;
-    var options = {
-      fileKey: "headImg",//相当于form表单项的name属性
-      fileName: fileURL.substr(fileURL.lastIndexOf('/') + 1),
-      mimeType: "image/jpeg"
-    };
-
-    $cordovaFileTransfer.upload(server,fileURL,options)
-      .then(function(result) {
-        // Success!
-        alert("Code = " + result.responseCode + "Response = " + result.response+ "Sent = " + result.bytesSent);
-      }, function (err) {
-        // Error
-        alert("An error has occurred: Code = " + error.code + "upload error source " + error.source + "upload error target " + error.target);
-      }, function (progress) {
-        // constant progress updates
-      });
-  }
+    }
 
 
-});
+  });

@@ -12,7 +12,7 @@ angular.module('sightCommentModule', [])
 
     $scope.suggestIndex = [0, 1, 2, 3, 4, 5];
     $scope.suggestClass = ['label-default', 'label-primary', 'label-success', 'label-info', 'label-warning', 'label-danger'];
-    $scope.suggestName = ['游乐园', '自然景观', '商城', '人文景观', '美食', '科技馆'];
+    $scope.suggestName = ['增加场地面积', '改善周边交通', '增加绿化', '整顿卫生', '加强安保', '增加优惠'];
 
     $scope.goBack = function(){
       $ionicNavBarDelegate.back();
@@ -169,6 +169,7 @@ angular.module('sightCommentModule', [])
 
     $scope.addComment = function(){
       var text = document.getElementById('comment-input').value;
+      document.getElementById('comment-input').value = "";
       if (text != undefined && text != null && text != "") {
         $.ajax(server + "commentCreate?sightId="+$stateParams.sightId+"&commentType=0&commentText="+text,{
           type:"GET",
@@ -178,9 +179,11 @@ angular.module('sightCommentModule', [])
             console.log(response);
             if(response.error_type == 0){
               var obj = {};
-              obj.user = response.comment.user.username;
-              obj.img = response.comment.user.headImg;
-              obj.content = response.comment.commentText;
+              var username = window.localStorage ? localStorage.getItem("username") : Cookie.read("username");
+              var headImg = window.localStorage ? localStorage.getItem("headImg") : Cookie.read("headImg");
+              obj.user = username;
+              obj.img = headImg;
+              obj.content = text;
 
               $scope.comments[$scope.comments.length] = obj;
               $scope.comments[$scope.comments.length-1].content = splitPartgraph($scope.comments[$scope.comments.length-1].content);
@@ -333,13 +336,13 @@ angular.module('sightCommentModule', [])
     }
 
     var stepW = 24;
-    var stars = $("#star > li");
+    var stars = $("#star2 > li");
     var n = 0;
-    $("#showb").css("width",0);
+    $("#showb2").css("width",0);
     stars.each(function(i){
       $(stars[i]).click(function(e){
         n = i+1;
-        $("#showb").css({"width":stepW*n});
+        $("#showb2").css({"width":stepW*n});
         $(this).find('a').blur();
         console.log(n);
       });
@@ -350,7 +353,7 @@ angular.module('sightCommentModule', [])
         layer.msg("请评分！");
         return;
       }
-      $.ajax(server + "scoreCreate?sightId="+$stateParams.sightId+"&score="+n,{
+      $.ajax(server + "scoreCreate?sightId="+$stateParams.sightId+"&point="+n+"&scoreMsg=''",{
         type:"GET",
         xhrFields:{withCredentials: true},
         crossDomain:true,
@@ -358,6 +361,9 @@ angular.module('sightCommentModule', [])
           console.log(response);
           if(response.error_type == 0){
             layer.msg("提交成功");
+          }
+          if (response.error_type == 301) {
+            layer.msg("不能重复评分");
           }
         }
       });

@@ -140,7 +140,7 @@ angular.module('mapModule', [])
         if ($stateParams.sightName != undefined) {
           $state.go('sightDetail', {sightName: $stateParams.sightName});
         } else {
-
+          layer.msg("请选择一个景点");
         }
       }
       // 添加DOM元素到地图中
@@ -154,29 +154,7 @@ angular.module('mapModule', [])
     map.addControl(myDetailCtrl);
 
 
-    // 点击显示标签 start
-    var title = "天安门";
-    var info = "天安门坐落在中国北京市中心,故宫的南侧,与天安门广场隔长安街相望,是清朝皇城的大门...";
-    var img = "http://app.baidu.com/map/images/tiananmen.jpg";
-    var sContent =
-      "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>" + title + "</h4>" +
-      "<img style='float:right;margin:4px' id='imgDemo' src='" + img + "' width='139' height='104' title='天安门'/>" +
-      "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + info + "</p>" +
-      "</div>";
-    var point = new BMap.Point(121.48, 31.22);
-    var marker = new BMap.Marker(point);
-    var infoWindow = new BMap.InfoWindow(sContent);
-    map.addOverlay(marker);
-    marker.addEventListener("click", function () {
-      this.openInfoWindow(infoWindow);
-      //图片加载完毕重绘infowindow
-      document.getElementById('imgDemo').onload = function () {
-        infoWindow.redraw();   //防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
-      }
-      $stateParams.sightName = "复旦大学";
-    });
 
-    // 点击显示标签 end
 
 
     if ($stateParams.sightName != undefined) {
@@ -289,6 +267,30 @@ angular.module('mapModule', [])
           }
 
 
+          function addClickHandler(sight,marker){
+            marker.addEventListener("click",function(e){
+              openInfo(sight,e)}
+            );
+          }
+          function openInfo(sight,e){
+            var p = e.target;
+            var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+            console.log(sight);
+            var title = sight.name;
+            var info = sight.description;
+            var img = sight.mainImg;
+            var sContent =
+              "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>" + title + "</h4>" +
+              "<img style='float:right;margin:4px' id='imgDemo' src='" + img + "' width='139' height='104' title='"+title+"'/>" +
+              "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>" + info + "</p>" +
+              "</div>";
+            var infoWindow = new BMap.InfoWindow(sContent);
+
+            map.openInfoWindow(infoWindow,point);
+            $stateParams.sightName = title;
+            console.log(title);
+          }
+
           var radius = distance / 2;
           console.log(center.lng + " " + center.lat + " " + radius);
           console.log(server + "sightListGet?lng1=" + lng1 + "&lat1=" + lat1 + "&lng2=" + lng2 + "&lat2=" + lat2);
@@ -297,10 +299,9 @@ angular.module('mapModule', [])
               console.log(response);
               if (response.error_type == 0) {
                 $scope.mySights = response.sightList;
-
                 for (var i = 0; i < $scope.mySights.length; i++) {
                   var sight = $scope.mySights[i];
-
+                  // 点击显示标签 start
                   var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25), {
                     offset: new BMap.Size(10, 25), // 指定定位位置
                     imageOffset: new BMap.Size(0, 0 - 10 * 25) // 设置图片偏移
@@ -308,9 +309,13 @@ angular.module('mapModule', [])
                   var point = new BMap.Point($scope.mySights[i].lng, $scope.mySights[i].lat);
                   var myMarker = new BMap.Marker(point, {icon: myIcon});
                   map.addOverlay(myMarker);
+                  addClickHandler(sight,myMarker);
+                  // 点击显示标签 end
+
                 }
               }
             })
+
         }
 
         console.log('Tapped!', res);
