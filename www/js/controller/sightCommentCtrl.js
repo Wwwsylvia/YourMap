@@ -18,27 +18,6 @@ angular.module('sightCommentModule', [])
       $ionicNavBarDelegate.back();
     }
 
-    //$scope.comments = [{
-    //  "user": "陈公子",
-    //  "img": "http://www.runoob.com/try/demo_source/venkman.jpg",
-    //  "content": "我好饥渴，大家快来上我！"
-    //},{
-    //  "user": "老汤",
-    //  "img": "http://www.runoob.com/try/demo_source/venkman.jpg",
-    //  "content": "我很强！"
-    //},{
-    //  "user": "流流",
-    //  "img": "http://www.runoob.com/try/demo_source/venkman.jpg",
-    //  "content": "蛤？"
-    //},{
-    //  "user": "芒芒",
-    //  "img": "http://www.runoob.com/try/demo_source/venkman.jpg",
-    //  "content": "你们这些渣渣！"
-    //},{
-    //  "user": "海峰",
-    //  "img": "http://www.runoob.com/try/demo_source/venkman.jpg",
-    //  "content": "嘿嘿嘿，巴拉巴拉巴拉超长超长超长超长超长超长超长超长超长超超长超超长超超长超超长超超长超超长超超长超超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长超长2"
-    //}];
 
     var splitPartgraph = function(text){
       var result=[];
@@ -55,10 +34,6 @@ angular.module('sightCommentModule', [])
       result[count-1] = text;
       return result;
     }
-
-
-
-
 
 
     var map = new BMap.Map("commentMap");          // 创建地图实例
@@ -106,6 +81,7 @@ angular.module('sightCommentModule', [])
       $scope.class2 = "";
       $scope.class3 = "";
       $scope.class4 = "";
+      getcommentList();
     }
 
     $scope.labelTab = function () {
@@ -115,6 +91,7 @@ angular.module('sightCommentModule', [])
       $scope.class2 = "in active";
       $scope.class3 = "";
       $scope.class4 = "";
+      getLabelList();
 
     }
 
@@ -125,6 +102,7 @@ angular.module('sightCommentModule', [])
       $scope.class2 = "";
       $scope.class3 = "in active";
       $scope.class4 = "";
+      getSuggestList();
     }
 
     $scope.surveyTab = function () {
@@ -143,29 +121,32 @@ angular.module('sightCommentModule', [])
     }
 
 
+    function getcommentList() {
+      $http.get(server+"commentListGet?sightId="+$stateParams.sightId+"&commentType=0")
+        .success(function(response){
+          console.log(response);
+          if (response.error_type == 0) {
+            var commentList = response.commentList;
+            $scope.comments=[];
+            for (var i=0;i<commentList.length;i++) {
+              var obj = {};
+              obj.user = commentList[i].user.username;
+              obj.img = server+ commentList[i].user.headImg;
+              obj.content = commentList[i].commentText;
+              $scope.comments[i] = obj;
+            }
 
-    $http.get(server+"commentListGet?sightId="+$stateParams.sightId+"&commentType=0")
-      .success(function(response){
-        console.log(response);
-        if (response.error_type == 0) {
-          var commentList = response.commentList;
-          $scope.comments=[];
-          for (var i=0;i<commentList.length;i++) {
-            var obj = {};
-            obj.user = commentList[i].user.username;
-            obj.img = commentList[i].user.headImg;
-            obj.content = commentList[i].commentText;
-            $scope.comments[i] = obj;
+            for (var i=0;i<$scope.comments.length;i++){
+              $scope.comments[i].content = splitPartgraph($scope.comments[i].content);
+            }
+            console.log($scope.comments);
           }
 
-          for (var i=0;i<$scope.comments.length;i++){
-            $scope.comments[i].content = splitPartgraph($scope.comments[i].content);
-          }
-          console.log($scope.comments);
-        }
 
+        })
+    }
 
-      })
+    getcommentList();
 
     $scope.addComment = function(){
       var text = document.getElementById('comment-input').value;
@@ -182,7 +163,7 @@ angular.module('sightCommentModule', [])
               var username = window.localStorage ? localStorage.getItem("username") : Cookie.read("username");
               var headImg = window.localStorage ? localStorage.getItem("headImg") : Cookie.read("headImg");
               obj.user = username;
-              obj.img = headImg;
+              obj.img = server+headImg;
               obj.content = text;
 
               $scope.comments[$scope.comments.length] = obj;
@@ -197,23 +178,28 @@ angular.module('sightCommentModule', [])
       console.log(text);
     }
 
-    $scope.labels = [];
+    function getLabelList() {
+      $scope.labels = [];
 
-    $.ajax(server + "labelListGetBySightId?sightId="+$stateParams.sightId,{
-      type:"GET",
-      xhrFields:{withCredentials: true},
-      crossDomain:true,
-      success:function(response, status, xhr){
-        console.log("labelList ");
-        console.log(response);
-        if(response.error_type == 0){
-          $scope.labels = [];
-          for (var i=0;i<response.labelList.length;i++) {
-            $scope.labels[i] = response.labelList[i].type;
+      $.ajax(server + "labelListGetBySightId?sightId="+$stateParams.sightId,{
+        type:"GET",
+        xhrFields:{withCredentials: true},
+        crossDomain:true,
+        success:function(response, status, xhr){
+          console.log("labelList ");
+          console.log(response);
+          if(response.error_type == 0){
+            $scope.labels = [];
+            for (var i=0;i<response.labelList.length;i++) {
+              $scope.labels[i] = response.labelList[i].type;
+            }
           }
         }
-      }
-    });
+      });
+    }
+
+    getLabelList();
+
 
     $scope.addLabel = function (type) {
       console.log(type);
@@ -240,23 +226,27 @@ angular.module('sightCommentModule', [])
       }
     }
 
-
-    $scope.suggests = [];
-    $.ajax(server + "suggestionListGetByUser?sightId="+$stateParams.sightId,{
-      type:"GET",
-      xhrFields:{withCredentials: true},
-      crossDomain:true,
-      success:function(response, status, xhr){
-        console.log("suggestionList ");
-        console.log(response);
-        if(response.error_type == 0){
-          $scope.suggests = [];
-          for (var i=0;i<response.suggestionList.length;i++) {
-            $scope.suggests[i] = response.suggestionList[i].type;
+    function getSuggestList(){
+      $scope.suggests = [];
+      $.ajax(server + "suggestionListGetByUser?sightId="+$stateParams.sightId,{
+        type:"GET",
+        xhrFields:{withCredentials: true},
+        crossDomain:true,
+        success:function(response, status, xhr){
+          console.log("suggestionList ");
+          console.log(response);
+          if(response.error_type == 0){
+            $scope.suggests = [];
+            for (var i=0;i<response.suggestionList.length;i++) {
+              $scope.suggests[i] = response.suggestionList[i].type;
+            }
           }
         }
-      }
-    });
+      });
+    }
+
+    getSuggestList();
+
     $scope.addSuggest = function (type) {
       console.log(type);
       var flag = false;

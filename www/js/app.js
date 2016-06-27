@@ -150,8 +150,8 @@ app.run(['$rootScope', '$http', '$cookies', function ($rootScope, $http, $cookie
   console.log("reload");
   $rootScope.isLogin = false;
   $http.defaults.headers.post['X-CSRFToken'] = $cookies.csrftoken;
-  var server = "http://192.168.1.122:8080/Adweb/";
-  //var server = "http://139.129.10.20:8080/GuangHuaLive/";
+  //var server = "http://192.168.1.122:8080/Adweb/";
+  var server = "http://139.129.10.20:8080/Adweb/";
   if (window.localStorage) {
     console.log("localStorage ", server);
     localStorage.setItem("serverAddress", server);

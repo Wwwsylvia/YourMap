@@ -33,13 +33,24 @@
         </h3>
       </div>
       <div class="panel-body">
-          <span class="label label-default">全部</span>
+        <span class="label label-default">全部</span>
           <span ng-repeat="item in labels">
             <span class="label {{labelClass[item]}}" ng-click="deleteLabel(item)">{{labelName[item]}}</span>
           </span>
       </div>
     </div>
-
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <label>推荐景点</label>
+        </h3>
+      </div>
+      <div class="panel-body">
+        <span  ng-repeat="item in recommends">
+          <span class="label label-default" ng-click="toSight(item)">{{item}}</span>
+        </span>
+      </div>
+    </div>
 
     <ion-list>
       <ion-item class="item-avatar" ng-repeat="item in data" ng-click="toSight(item.name)">

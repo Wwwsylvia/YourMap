@@ -13,46 +13,6 @@ angular.module('mainListModule', ['utilsModule'])
     $scope.labelName = ['游乐园', '自然景观', '商城', '人文景观', '美食', '科技馆', '全部'];
 
 
-    //$.ajax({
-    //  type : "get",
-    //  async:false,
-    //  url : "http://192.168.1.120:8080/Adweb/userLogin.do?jsonp=callbackfunction",
-    //  dataType : "jsonp",//数据类型为jsonp
-    //  jsonp: "callback",//服务端用于接收callback调用的function名的参数
-    //  jsonpCallback: "getMM",
-    //  success : function(data){
-    //    console.log(data.RESULTSET);
-    //    //$("#showcontent").text("Result:"+data.result)
-    //  },
-    //  error:function(error){
-    //    console.log(error);
-    //  }
-    //});
-
-
-    var url = "http://192.168.1.120:8080/Adweb/userLogin.do?jsonp=callbackfunction";
-    var script = document.createElement('script');
-    script.setAttribute('src', url);  //load javascript
-    document.getElementsByTagName('head')[0].appendChild(script);
-
-    //回调函数
-    function callbackfunction(data){
-      var html=JSON.stringify(data.RESULTSET);
-      alert(html);
-    }
-
-    //function getMM(data) {
-    //  console.log(data);
-    //  //alert("data: " + data);
-    //}
-    //var url ="http://192.168.1.120:8080/newFile.js";
-    //// 动态插入脚本
-    //var script = document.createElement('script');
-    //script.setAttribute('src', url);
-    //// 加载script
-    //document.getElementsByTagName('head')[0].appendChild(script);
-   // getMM("X");
-
     var geolocation = new BMap.Geolocation();
     var myPoint = new BMap.Point(121.48789949, 31.24916171);
 
@@ -122,49 +82,51 @@ angular.module('mainListModule', ['utilsModule'])
       json = "0,1,2,3,4,5";
     }
 
-    $scope.data = [{
-      "name": "虹桥火车站",
-      "score": 4.5,
-      "url": "http://www.runoob.com/try/demo_source/stantz.jpg",
-      "distance": 5,
-      "distanceText":"5km",
-      "info": "购物街"
-    }, {
-      "name": "南京东路",
-      "score": 4.5,
-      "url": "http://www.runoob.com/try/demo_source/stantz.jpg",
-      "distance": 66,
-      "distanceText":"66km",
-      "info": "购物街"
-    }, {
-      "name": "复旦大学",
-      "score": 3.5,
-      "url": "http://www.runoob.com/try/demo_source/stantz.jpg",
-      "distance": 25,
-      "distanceText":"25km",
-      "info": "购物街"
-    }, {
-      "name": "南京东路",
-      "score": 5.0,
-      "url": "http://www.runoob.com/try/demo_source/stantz.jpg",
-      "distance": 11,
-      "distanceText":"11km",
-      "info": "购物街"
-    }, {
-      "name": "张江高科",
-      "score": 1.5,
-      "url": "http://www.runoob.com/try/demo_source/stantz.jpg",
-      "distance": 34,
-      "distanceText":"34km",
-      "info": "购物街"
-    }, {
-      "name": "南京东路",
-      "score": 2.5,
-      "url": "http://www.runoob.com/try/demo_source/stantz.jpg",
-      "distance": 10,
-      "distanceText":"10km",
-      "info": "购物街"
-    },];
+    $scope.recommends = ["东方明珠","迪士尼乐园","欢乐谷"];
+
+    //$scope.data = [{
+    //  "name": "虹桥火车站",
+    //  "score": 4.5,
+    //  "url": "http://www.runoob.com/try/demo_source/stantz.jpg",
+    //  "distance": 5,
+    //  "distanceText":"5km",
+    //  "info": "购物街"
+    //}, {
+    //  "name": "南京东路",
+    //  "score": 4.5,
+    //  "url": "http://www.runoob.com/try/demo_source/stantz.jpg",
+    //  "distance": 66,
+    //  "distanceText":"66km",
+    //  "info": "购物街"
+    //}, {
+    //  "name": "复旦大学",
+    //  "score": 3.5,
+    //  "url": "http://www.runoob.com/try/demo_source/stantz.jpg",
+    //  "distance": 25,
+    //  "distanceText":"25km",
+    //  "info": "购物街"
+    //}, {
+    //  "name": "南京东路",
+    //  "score": 5.0,
+    //  "url": "http://www.runoob.com/try/demo_source/stantz.jpg",
+    //  "distance": 11,
+    //  "distanceText":"11km",
+    //  "info": "购物街"
+    //}, {
+    //  "name": "张江高科",
+    //  "score": 1.5,
+    //  "url": "http://www.runoob.com/try/demo_source/stantz.jpg",
+    //  "distance": 34,
+    //  "distanceText":"34km",
+    //  "info": "购物街"
+    //}, {
+    //  "name": "南京东路",
+    //  "score": 2.5,
+    //  "url": "http://www.runoob.com/try/demo_source/stantz.jpg",
+    //  "distance": 10,
+    //  "distanceText":"10km",
+    //  "info": "购物街"
+    //},];
 
     var getSightList = function(){
       console.log("getting");
@@ -196,6 +158,7 @@ angular.module('mainListModule', ['utilsModule'])
       }
     }
 
+    layer.msg("定位中！");
     getSightList();
 
 

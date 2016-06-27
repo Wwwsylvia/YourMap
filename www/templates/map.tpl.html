@@ -1,18 +1,59 @@
 <ion-view view-title="">
-    <ion-nav-bar class="bar bar-positive"></ion-nav-bar>
-    <ion-nav-buttons side="left">
-        <button class="button button-icon icon ion-android-walk" ng-click="showPopup()"></button>
+  <ion-nav-bar class="bar bar-positive"></ion-nav-bar>
+  <ion-nav-buttons side="left">
+    <button class="button button-icon icon ion-android-walk" ng-click="showPopup()"></button>
 
-    </ion-nav-buttons>
-    <ion-nav-buttons side="right">
-        <!--<button class="button button-icon icon ion-android-walk" ng-click="showPopup()"></button>-->
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <!--<button class="button button-icon icon ion-android-walk" ng-click="showPopup()"></button>-->
 
-        <div id="r-result"><input type="text" id="suggestId" size="20" style="width:300px;padding-left:10px" value="" placeholder="上海迪士尼乐园"/></div>
-        <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:300px;height:auto; display:none;"></div>
-        <button class="button button-icon icon ion-ios-eye" ng-click="searchSights()"></button>
-    </ion-nav-buttons>
+    <div id="r-result"><input type="text" id="suggestId" size="20" style="width:300px;padding-left:10px" value=""
+                              placeholder="上海迪士尼乐园"/></div>
+    <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:300px;height:auto; display:none;"></div>
+    <button class="button button-icon icon ion-ios-eye" ng-click="searchSights()"></button>
+  </ion-nav-buttons>
 
   <ion-content>
-      <div id="container"></div>
+    <div id="container"></div>
+    <div style="height: 200px">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="btn-group dropup">
+            <button type="button" class="btn btn-primary dropdown-toggle"
+                    data-toggle="dropdown">
+              排序</span>
+            </button>
+            <ul class="dropdown-menu sort-item" role="menu">
+              <li ng-click="scoreSort(-1)"><a>评分从高到低</a></li>
+              <li ng-click="scoreSort(1)"><a>评分从低到高</a></li>
+              <li ng-click="distanceSort(1)"><a>距离从近到远</a></li>
+              <li ng-click="distanceSort(-1)"><a>距离从远到近</a></li>
+              <li ng-click="defualtSort()"><a>智能排序</a></li>
+            </ul>
+          </div>
+          <button type="button" class="btn btn-danger btn-lg" style="font-size: 5px">
+            <span class="glyphicon glyphicon-thumbs-up"></span>
+            <span ng-repeat="item in recommends">
+              <span class="label label-danger" ng-click="toSight(item)">{{item}}</span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <ion-list>
+        <ion-item class="item-avatar" ng-repeat="item in data">
+          {{item.name}}
+          <img ng-src="{{item.url}}">
+          <span class="label label-primary" ng-click="toSight(item.name)">查看详情</span>
+          <h2>评分：{{item.score}}距离：{{item.distanceText}}</h2>
+
+
+          <span ng-repeat="subItem in item.labels">
+                <span class="label {{labelClass[subItem]}}">{{labelName[subItem]}}</span>
+              </span>
+        </ion-item>
+
+      </ion-list>
+    </div>
   </ion-content>
 </ion-view>

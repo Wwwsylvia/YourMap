@@ -122,6 +122,7 @@ angular.module('sightDetailModule',[])
       console.log('Tapped!', res);
       if (res == 200) {
         console.log($scope.data.error);
+        layer.msg("错误报告已提交");
 
       }
 
@@ -139,6 +140,12 @@ angular.module('sightDetailModule',[])
       crossDomain:true,
       success:function(response, status, xhr){
         console.log(response);
+        if (response.error_type == 0) {
+          layer.msg("加入心愿单成功");
+        }
+        if (response.error_type == 301) {
+          layer.msg("您已经添加过了");
+        }
       }
     });
   }
@@ -154,6 +161,12 @@ angular.module('sightDetailModule',[])
       crossDomain:true,
       success:function(response, status, xhr){
         console.log(response);
+        if (response.error_type == 0) {
+          layer.msg("添加足迹成功");
+        }
+        if (response.error_type == 301) {
+          layer.msg("您已经添加过了");
+        }
       }
     });
   }
@@ -169,6 +182,12 @@ angular.module('sightDetailModule',[])
       crossDomain:true,
       success:function(response, status, xhr){
         console.log(response);
+        if (response.error_type == 0) {
+          layer.msg("收藏成功");
+        }
+        if (response.error_type == 301) {
+          layer.msg("您已经收藏过了");
+        }
       }
     });
   }
