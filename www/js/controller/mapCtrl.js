@@ -304,7 +304,7 @@ angular.module('mapModule', [])
                   } else {
                     obj.distanceText = obj.distance.toFixed(0) + "m";
                   }
-                  obj.labels = [];
+                  obj.labels = filterLabelList(response.labelList[i]);
                   $scope.data[i] = obj;
 
                 }
@@ -384,14 +384,14 @@ angular.module('mapModule', [])
               obj.name = sight.name;
               obj.score = sight.avgScore;
               obj.url = sight.mainImg;
-              console.log($scope.myPoint.lng+" "+$scope.myPoint.lat+" "+sight.lng+" "+sight.lat);
+             // console.log($scope.myPoint.lng+" "+$scope.myPoint.lat+" "+sight.lng+" "+sight.lat);
               obj.distance = DistanceService.calcDistance($scope.myPoint.lng,$scope.myPoint.lat,sight.lng,sight.lat);
               if (obj.distance>1000) {
                 obj.distanceText = (obj.distance/1000).toFixed(2)+"km";
               } else {
                 obj.distanceText = obj.distance.toFixed(0) + "m";
               }
-              obj.labels = [];
+              obj.labels = filterLabelList(response.labelList[i]);
               $scope.data[i] = obj;
             }
           }
@@ -470,6 +470,17 @@ angular.module('mapModule', [])
           }
         }
       }
+    }
+
+    function filterLabelList(list) {
+      var res=[];
+      for (var i=0;i<list.length;i++){
+        var x = list[i].type;
+        if (!(x in res)) {
+          res[res.length] = x;
+        }
+      }
+      return res;
     }
 
   }])

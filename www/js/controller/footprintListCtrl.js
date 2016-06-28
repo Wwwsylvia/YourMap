@@ -76,7 +76,7 @@ angular.module('footprintListModule',[])
   }
 
   $scope.toSight = function(name){
-    $state.go('tab.map', {sightName: name});
+    $state.go('sightDetail', {sightName: name});
   }
 
 }])
