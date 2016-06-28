@@ -1,10 +1,10 @@
 <ion-view view-title="景点详情" cache-view="false">
   <ion-nav-bar class="bar bar-positive"></ion-nav-bar>
   <ion-nav-buttons side="left">
-    <button class="button button-positive" ng-click="goBack()"><i class="ion-arrow-left-c"></i> 后退</button>
+    <a class="button button-icon icon ion-chevron-left" ng-click="goBack()"></a>
   </ion-nav-buttons>
   <ion-nav-buttons side="right">
-    <button class="button button-positive" ng-click="toComment()">查看评价</button>
+    <button class="button button-small button-clear" ng-click="toComment()">查看评价</button>
   </ion-nav-buttons>
 
   <ion-content>
@@ -71,7 +71,7 @@
         <input class="hidden" id="video-cover-file" type="file"
                onchange="previewVideoCover()">
         <h3 class="panel-title">
-          图册&nbsp;&nbsp;<button ng-click="addPhoto()">上传</button>&nbsp;&nbsp;<span style="display: none" id="selectInfo">已选择图片</span>&nbsp;&nbsp;<button style="display: none" ng-click="uploadPhoto()" id="confirmUploadPic">确认上传</button>
+          图册&nbsp;&nbsp;<button class="button button-small" ng-click="addPhoto()">上传</button>&nbsp;&nbsp;<span style="display: none" id="selectInfo">已选择图片</span>&nbsp;&nbsp;<button style="display: none" ng-click="uploadPhoto()" id="confirmUploadPic">确认上传</button>
         </h3>
       </div>
       <div class="panel-body">

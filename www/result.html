@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+
+  <link href="css/style.css" rel="stylesheet">
+  <script src="lib/jquery-2.2.1.js"></script>
+  <link href="lib/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
+  <script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+  <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+  <title>Title</title>
+</head>
+<body>
+<h2 id="text">正在登录...</h2>
+<br>
+<br>
+
+<div class="padding">
+  <button class="button button-block button-positive" onclick="goBack()">返回</button>
+  <script >
+    var server = window.localStorage ? localStorage.getItem("serverAddress") : Cookie.read("serverAddress");
+    function goBack(){
+      window.location.href = "http://localhost:8080/YourMap/www/index.html#/tab/personal";
+    }
+    function GetQueryString(name)
+    {
+      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+      var r = window.location.search.substr(1).match(reg);
+      if(r!=null)return  unescape(r[2]); return null;
+    }
+
+    var code = GetQueryString("code");
+    console.log(code);
+
+    $.ajax(server + "userThirdLogin?code="+code,{
+      type:"GET",
+      xhrFields:{withCredentials: true},
+      crossDomain:true,
+      success:function(response, status, xhr){
+        console.log(response);
+        if (response.error_type == 0) {
+          document.getElementById('text').innerHTML = "登陆成功！";
+          if (window.localStorage) {
+            console.log("localStorage");
+            localStorage.setItem("isLogin", "login");
+            localStorage.setItem("username", response.user.username);
+            localStorage.setItem("headImg", response.user.headImg);
+          } else {
+            console.log("cookie");
+            Cookie.write("isLogin", "login");
+            Cookie.write("username", response.user.username);
+            Cookie.write("headImg", response.user.headImg);
+          }
+        } else {
+          document.getElementById('text').innerHTML = "登陆失败！";
+        }
+
+      }
+    });
+  </script>
+</div>
+</body>
+</html>

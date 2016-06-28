@@ -1,4 +1,5 @@
 /* Empty. Add your own CSS if you like */
+
 .my-view {
   font-family: "sans-serif";
   background-color: whitesmoke;
@@ -161,8 +162,8 @@ footer > a {
   color: dimgray !important;
 }
 
-.weibo-button {
-  border: 1px solid orangered !important;
+.github-button {
+  border: 1px solid darkslategrey !important;
   /*color: orangered;*/
 }
 
@@ -173,7 +174,7 @@ footer > a {
 
 .login-button-icon {
   position: relative;
-  top: 5px;
+  /*top: 5px;*/
   left: -8px;
 }
 

@@ -1,7 +1,7 @@
 <ion-view class="my-view">
   <ion-nav-bar class="bar bar-positive"></ion-nav-bar>
   <ion-nav-buttons side="left">
-    <button class="button button-positive" ng-click="goBack()"><i class="ion-arrow-left-c"></i> 后退</button>
+    <a class="button button-icon icon ion-chevron-left" ng-click="goBack()"></a>
   </ion-nav-buttons>
   <ion-nav-title class="my-view-title">登录Your Map</ion-nav-title>
   <ion-content>
@@ -22,9 +22,9 @@
       </div>
     </form>
 
-    <div class="padding">
-      <a class="button button-block button-outline button-light login-button weibo-button"><img
-        class="login-button-icon" src="../resources/test/LOGO_32.png">微博账号登录</a>
+    <div  class="padding">
+      <a ng-click="otherLogin1()" class="button button-block button-outline button-light login-button github-button"><img
+        class="login-button-icon" src="../resources/test/github_icon.png">github账号登录</a>
     </div>
 
     <div class="padding">

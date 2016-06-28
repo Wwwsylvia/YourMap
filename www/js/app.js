@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-var app = angular.module('starter', ['ngCordova', 'ngCookies', 'ionic', 'rootTabModule', 'mainListModule', 'addNewSightModule', 'sightDetailModule', 'searchHistoryModule', 'mapModule','personalModule','loginModule','registerModule','changeAvatarModule','sightCommentModule','show3DModule','footprintListModule','showVideoModule']);
+var app = angular.module('starter', ['ngCordova', 'ngCookies', 'ionic', 'rootTabModule', 'mainListModule', 'addNewSightModule', 'sightDetailModule', 'searchHistoryModule', 'mapModule','personalModule','loginModule','registerModule','changeAvatarModule','sightCommentModule','show3DModule','footprintListModule','showVideoModule','otherLoginModule','otherLoginResultModule']);
 
 app.run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -98,6 +98,16 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         templateUrl: 'templates/register.tpl.html',
         controller: 'RegisterCtrl'
       })
+      .state('otherLogin', {
+        url: '/otherLogin',
+        templateUrl: 'templates/other_login.tpl.html',
+        controller: 'otherLoginCtrl'
+      })
+      .state('otherLoginResult', {
+        url: '/otherLoginResult',
+        templateUrl: 'templates/other_login_result.tpl.html',
+        controller: 'otherLoginResultCtrl'
+      })
       .state('searchHistory', {
         url: '/searchHistory',
         templateUrl: 'templates/search_history.tpl.html',
@@ -159,7 +169,7 @@ app.run(['$rootScope', '$http', '$cookies', function ($rootScope, $http, $cookie
   console.log("reload");
   $rootScope.isLogin = false;
   $http.defaults.headers.post['X-CSRFToken'] = $cookies.csrftoken;
-  //var server = "http://192.168.1.122:8080/Adweb/";
+  //var server = "http://192.168.1.117:8080/Adweb/";
   var server = "http://139.129.10.20:8080/Adweb/";
   if (window.localStorage) {
     console.log("localStorage ", server);

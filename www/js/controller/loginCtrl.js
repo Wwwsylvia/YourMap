@@ -59,4 +59,9 @@ angular.module('loginModule',[])
     });
 
   }
+
+  $scope.otherLogin1 = function (){
+    console.log("dd");
+    $state.go('otherLogin');
+  }
 }]);
