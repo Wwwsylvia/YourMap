@@ -200,11 +200,11 @@ angular.module('mapModule', [])
 
 
     $scope.showPopup = function () {
-      $scope.data = {}
+      $scope.data1 = {}
 
       // 自定义弹窗
       var myPopup = $ionicPopup.show({
-        template: '<input type="text" placeHolder="起点" ng-model="data.start"><br/><input type="text" placeHolder="终点" ng-model="data.end">',
+        template: '<input type="text" placeHolder="起点" ng-model="data1.start"><br/><input type="text" placeHolder="终点" ng-model="data1.end">',
         title: '路线规划',
         subTitle: '请输入起点和终点',
         scope: $scope,
@@ -215,7 +215,7 @@ angular.module('mapModule', [])
             type: 'button-positive',
             onTap: function (e) {
               console.log('xx');
-              if ($scope.data.start != "" && $scope.data.end != "") {
+              if ($scope.data1.start != "" && $scope.data1.end != "") {
                 return 200;
 
               } else {
@@ -228,7 +228,7 @@ angular.module('mapModule', [])
             type: 'button-positive',
             onTap: function (e) {
               console.log('xx');
-              if ($scope.data.start != "" && $scope.data.end != "") {
+              if ($scope.data1.start != "" && $scope.data1.end != "") {
                 return 201;
 
               } else {
@@ -242,6 +242,9 @@ angular.module('mapModule', [])
 
         // 显示自定义景点
         var searchComplete = function (results) {
+          if (results == null || results == undefined) {
+            return;
+          }
           var plan = results.getPlan(0);
           var distance = plan.getDistance(false);
 
@@ -297,7 +300,7 @@ angular.module('mapModule', [])
                   obj.sightId = sight.sightId;
                   obj.name = sight.name;
                   obj.score = sight.avgScore;
-                  obj.url = sight.mainImg;
+                  obj.url = server+sight.mainImg;
                   obj.distance = DistanceService.calcDistance($scope.myPoint.lng,$scope.myPoint.lat,sight.lng,sight.lat);
                   if (obj.distance>1000) {
                     obj.distanceText = (obj.distance/1000).toFixed(2)+"km";
@@ -315,20 +318,20 @@ angular.module('mapModule', [])
 
         console.log('Tapped!', res);
         if (res == 200) {
-          console.log($scope.data.start + " " + $scope.data.end);
+          console.log($scope.data1.start + " " + $scope.data1.end);
           var walking = new BMap.WalkingRoute(map, {
             renderOptions: {map: map, autoViewport: true},
             onSearchComplete: searchComplete,
           });
-          walking.search($scope.data.start, $scope.data.end);
+          walking.search($scope.data1.start, $scope.data1.end);
         }
         if (res == 201) {
-          console.log($scope.data.start + " " + $scope.data.end);
+          console.log($scope.data1.start + " " + $scope.data1.end);
           var driving = new BMap.DrivingRoute(map, {
             renderOptions: {map: map, autoViewport: true},
             onSearchComplete: searchComplete
           });
-          driving.search($scope.data.start, $scope.data.end);
+          driving.search($scope.data1.start, $scope.data1.end);
         }
 
 
@@ -383,7 +386,7 @@ angular.module('mapModule', [])
               obj.sightId = sight.sightId;
               obj.name = sight.name;
               obj.score = sight.avgScore;
-              obj.url = sight.mainImg;
+              obj.url = server+sight.mainImg;
              // console.log($scope.myPoint.lng+" "+$scope.myPoint.lat+" "+sight.lng+" "+sight.lat);
               obj.distance = DistanceService.calcDistance($scope.myPoint.lng,$scope.myPoint.lat,sight.lng,sight.lat);
               if (obj.distance>1000) {
@@ -413,7 +416,7 @@ angular.module('mapModule', [])
       console.log(sight);
       var title = sight.name;
       var info = sight.description;
-      var img = sight.mainImg;
+      var img = server+sight.mainImg;
       var sContent =
         "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>" + title + "</h4>" +
         "<img style='float:right;margin:4px' id='imgDemo' src='" + img + "' width='139' height='104' title='"+title+"'/>" +
@@ -431,6 +434,19 @@ angular.module('mapModule', [])
     }
 
     $scope.recommends = ["东方明珠","迪士尼乐园","欢乐谷"];
+    $.ajax(server + "recommendGet?", {
+      type: "GET",
+      xhrFields: {withCredentials: true},
+      crossDomain: true,
+      success: function (response, status, xhr) {
+        console.log(response);
+        if (response.error_type == 0) {
+          for (var i=0;i<response.sightList.length;i++){
+            $scope.recommends[i]=response.sightList[i].name;
+          }
+        }
+      }
+    });
 
     var compare = function (x, y) {
       if ((x - y) * 1000000 > 0) return 1;

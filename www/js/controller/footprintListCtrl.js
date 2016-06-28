@@ -54,7 +54,7 @@ angular.module('footprintListModule',[])
           obj.sightId = sight.sightId;
           obj.name = sight.name;
           obj.score = sight.avgScore;
-          obj.url = sight.mainImg;
+          obj.url = server+sight.mainImg;
           $scope.data[i] = obj;
         }
       }

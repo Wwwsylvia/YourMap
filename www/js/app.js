@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-var app = angular.module('starter', ['ngCordova', 'ngCookies', 'ionic', 'rootTabModule', 'mainListModule', 'addNewSightModule', 'sightDetailModule', 'searchHistoryModule', 'mapModule','personalModule','loginModule','registerModule','changeAvatarModule','sightCommentModule','show3DModule','footprintListModule']);
+var app = angular.module('starter', ['ngCordova', 'ngCookies', 'ionic', 'rootTabModule', 'mainListModule', 'addNewSightModule', 'sightDetailModule', 'searchHistoryModule', 'mapModule','personalModule','loginModule','registerModule','changeAvatarModule','sightCommentModule','show3DModule','footprintListModule','showVideoModule']);
 
 app.run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -112,6 +112,15 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         url: '/show3DSight',
         templateUrl: 'templates/show_3d_sight.tpl.html',
         controller: 'Show3DSightCtrl'
+      })
+      .state('show3DSight2', {
+        url: '/show3DSight2',
+        templateUrl: 'templates/Shadow.html',
+      })
+      .state('showSightVideo', {
+        url: '/showSightVideo?sightId',
+        templateUrl: 'templates/show_video.tpl.html',
+        controller:'showVideoCtrl'
       })
       .state('footprint', {
         url: '/footprint?:footprintType',

@@ -8,6 +8,8 @@ angular.module('sightDetailModule',[])
     $ionicNavBarDelegate.back();
   }
 
+
+
   alertMsg = function (msg) {
     var alertPopup = $ionicPopup.alert({
       title: msg,
@@ -57,12 +59,16 @@ angular.module('sightDetailModule',[])
         $scope.sight.description = temp.detail;
         $scope.sight.score = temp.avgScore;
         $scope.sight.coverImg = temp.mainImg;
-        $scope.sight.img = [];
+        $scope.sight.img = [[]];
         $scope.sight.video = temp.video;
         $scope.sight.otherInfo = temp.otherInfo;
+
+        getImgList();
+
       }
 
       var n = $scope.sight.score;
+      $scope.sight.scoreWidth = stepW*n;
       if (n>5) n=5;
       console.log(n);
       $("#showb").css({"width":stepW*n});
@@ -70,6 +76,28 @@ angular.module('sightDetailModule',[])
     });
 
 
+  function getImgList(){
+    $http.get(server+"imgGet?sightId="+$scope.sight.sightId)
+      .success(function(response){
+        console.log(response);
+        var temp = response.sight;
+        if (response.error_type == 0) {
+          var row = 0;
+          var col = 0;
+          for (var i=0;i<response.imgList.length;i++){
+            if (col == 3) {
+              row++;
+              col =0;
+            }
+            if (row == 3) {
+              break;
+            }
+            $scope.sight.img[row][col] = server +response.imgList[i].url;
+            col++;
+          }
+        }
+      });
+  }
 
 
   $scope.isShowMore = false;
@@ -85,11 +113,20 @@ angular.module('sightDetailModule',[])
   }
 
   $scope.lookVideo = function(){
-
+    if (!sightExist) {
+      alertMsg('我们还未收录此景点！');
+    }
+    $state.go('showSightVideo',{sightId:$scope.sight.sightId});
   }
 
   $scope.look3D = function(){
-    $state.go('show3DSight');
+    if ($stateParams.sightName == "世博会博物馆") {
+      $state.go('show3DSight2');
+    } else {
+      $state.go('show3DSight');
+    }
+
+
   }
 
   $scope.reportError = function(){
@@ -117,6 +154,7 @@ angular.module('sightDetailModule',[])
         }
       ]
     });
+
     myPopup.then(function (res) {
 
       console.log('Tapped!', res);
@@ -187,6 +225,81 @@ angular.module('sightDetailModule',[])
         }
         if (response.error_type == 301) {
           layer.msg("您已经收藏过了");
+        }
+      }
+    });
+  }
+
+
+  var image_file;
+  var head_changed_flag = false;
+  previewVideoCover = function () {
+    var file = document.getElementById("video-cover-file").files[0];
+    if (file) {
+      if (file.type.substring(0, 5) == "image") {
+        $('#selectInfo').show();
+        $('#confirmUploadPic').show();
+        head_changed_flag = true;
+        image_file = file;
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function (e) {
+          var urlData = this.result;
+          //document.getElementById("video-cover-img").setAttribute("src", urlData);
+        }
+      }
+      else {
+        alert("不要调皮!只能上传图片！");
+      }
+    }
+  };
+  // "添加附件"Event
+  $scope.addPhoto = function () {
+    $('#video-cover-file').trigger('click');
+  }
+
+  $scope.uploadPhoto = function () {
+    if (!sightExist) {
+      alertMsg('我们还未收录此景点，不能上传！');
+      return;
+    }
+    var coverImg = image_file;
+    var formData = new FormData();
+    formData.append("sightId", $scope.sight.sightId);
+    formData.append("img", coverImg);
+    layer.msg("上传中......");
+    $.ajax({
+      url: server + "imgUpload",
+      type: 'POST',
+      data: formData,
+
+      /**
+       * 必须false才会避开jQuery对 formdata 的默认处理
+       * XMLHttpRequest会对 formdata 进行正确的处理
+       */
+      processData: false,
+      /**
+       *必须false才会自动加上正确的Content-Type
+       */
+      contentType: false,
+      xhrFields: {withCredentials: true},
+      crossDomain: true,
+      success: function (response) {
+        console.log(response);
+        if (response.error_type == 0) {
+          layer.msg("上传成功");
+          getImgList();
+          $('#selectInfo').hide();
+          $('#confirmUploadPic').hide();
+          if (window.localStorage) {
+            console.log("localStorage");
+
+            localStorage.setItem("headImg", response.url);
+          } else {
+            console.log("cookie");
+
+            Cookie.write("headImg", response.url);
+          }
         }
       }
     });

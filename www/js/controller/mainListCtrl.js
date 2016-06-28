@@ -74,15 +74,34 @@ angular.module('mainListModule', ['utilsModule'])
     }
 
     console.log($scope.labels);
-    var json = $scope.labels[0];
-    for (var i = 1; i < $scope.labels.length; i++) {
-      json = json + "," + $scope.labels[i];
+
+    var json;
+    function setgGetJson(){
+      json = $scope.labels[0];
+      for (var i = 1; i < $scope.labels.length; i++) {
+        json = json + "," + $scope.labels[i];
+      }
+      if (json == null || json == undefined || json == "") {
+        json = "0,1,2,3,4,5";
+      }
     }
-    if (json == null || json == undefined || json == "") {
-      json = "0,1,2,3,4,5";
-    }
+    setgGetJson();
 
     $scope.recommends = ["东方明珠","迪士尼乐园","欢乐谷"];
+
+    $.ajax(server + "recommendGet?", {
+      type: "GET",
+      xhrFields: {withCredentials: true},
+      crossDomain: true,
+      success: function (response, status, xhr) {
+        console.log(response);
+        if (response.error_type == 0) {
+          for (var i=0;i<response.sightList.length;i++){
+            $scope.recommends[i]=response.sightList[i].name;
+          }
+        }
+      }
+    });
 
     //$scope.data = [{
     //  "name": "虹桥火车站",
@@ -130,6 +149,7 @@ angular.module('mainListModule', ['utilsModule'])
 
     var getSightList = function(){
       console.log("getting");
+      setgGetJson();
       if(!located) {
         setTimeout(getSightList,100);
       } else {
@@ -143,7 +163,7 @@ angular.module('mainListModule', ['utilsModule'])
                 var obj = {};
                 obj.name = list[i].name;
                 obj.score = list[i].avgScore;
-                obj.url = list[i].mainImg;
+                obj.url = server+list[i].mainImg;
                 obj.distance = DistanceService.calcDistance(myPoint.lng,myPoint.lat,list[i].lng,list[i].lat);
                 if (obj.distance>1000) {
                   obj.distanceText = (obj.distance/1000).toFixed(2)+"km";

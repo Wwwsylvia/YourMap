@@ -71,6 +71,8 @@
               <span ng-repeat="item in suggestIndex">
                 <span class="label {{suggestClass[item]}}" ng-click="addSuggest(item)">{{suggestName[item]}}</span>
               </span>
+
+              <span class="label label-default" ng-click="addTextSuggest()">添加文字建议</span>
             </div>
           </div>
 
@@ -84,6 +86,14 @@
               <span ng-repeat="item in suggests">
                 <span class="label {{suggestClass[item]}}" ng-click="deleteSuggest(item)">{{suggestName[item]}}</span>
               </span>
+              <br>
+              <br>
+              <ul class="list-group">
+                <li class="list-group-item" ng-repeat="item in textSuggests">{{item}}</li>
+              </ul>
+              <!--<ion-list>-->
+                <!--<ion-item ng-repeat="item in textSuggests">{{item}}</ion-item>-->
+              <!--</ion-list>-->
             </div>
           </div>
 

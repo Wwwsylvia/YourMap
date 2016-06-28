@@ -4,7 +4,7 @@
 
 
 angular.module('sightCommentModule', [])
-  .controller('SightCommentCtrl', ['$scope', '$stateParams','$ionicNavBarDelegate','$http',function ($scope, $stateParams,$ionicNavBarDelegate,$http) {
+  .controller('SightCommentCtrl', ['$scope', '$stateParams','$ionicNavBarDelegate','$http','$ionicPopup',function ($scope, $stateParams,$ionicNavBarDelegate,$http,$ionicPopup) {
     $scope.labelIndex = [0, 1, 2, 3, 4, 5];
     $scope.labelClass = ['label-default', 'label-primary', 'label-success', 'label-info', 'label-warning', 'label-danger'];
     $scope.labelName = ['游乐园', '自然景观', '商城', '人文景观', '美食', '科技馆'];
@@ -243,6 +243,23 @@ angular.module('sightCommentModule', [])
           }
         }
       });
+
+      $scope.textSuggests = [];
+      $.ajax(server+"commentListGet?sightId="+$stateParams.sightId+"&commentType=1",{
+        type:"GET",
+        xhrFields:{withCredentials: true},
+        crossDomain:true,
+        success:function(response, status, xhr){
+          console.log("textSuggestionList ");
+          console.log(response);
+          if (response.error_type == 0) {
+            var commentList = response.commentList;
+            for (var i=0;i<commentList.length;i++) {
+              $scope.textSuggests[i] = commentList[i].commentText;
+            }
+          }
+        }
+      });
     }
 
     getSuggestList();
@@ -259,6 +276,70 @@ angular.module('sightCommentModule', [])
       if (!flag) {
         $scope.suggests[$scope.suggests.length] = type;
       }
+    }
+
+    $scope.addTextSuggest = function(){
+
+      $scope.newTextSuggest=[];
+      var myPopup = $ionicPopup.show({
+        template: '<input type="text" placeHolder="建议详情" ng-model="newTextSuggest.error">',
+        title: '添加文字建议',
+        subTitle: '请输入建议信息',
+        scope: $scope,
+        buttons: [
+          {text: '取消'},
+          {
+            text: '<b>提交</b>',
+            type: 'button-positive',
+            onTap: function (e) {
+              console.log('xx');
+              if ($scope.newTextSuggest.error != "" && $scope.newTextSuggest.error != undefined) {
+                return 200;
+
+              } else {
+                e.preventDefault();
+              }
+            }
+          }
+        ]
+      });
+
+      myPopup.then(function (res) {
+
+        console.log('Tapped!', res);
+        if (res == 200) {
+          console.log($scope.newTextSuggest.error);
+          var text = $scope.newTextSuggest.error
+
+          if (text != undefined && text != null && text != "") {
+            $.ajax(server + "commentCreate?sightId="+$stateParams.sightId+"&commentType=1&commentText="+text,{
+              type:"GET",
+              xhrFields:{withCredentials: true},
+              crossDomain:true,
+              success:function(response, status, xhr){
+                console.log(response);
+                if(response.error_type == 0){
+                  var obj = {};
+                  var username = window.localStorage ? localStorage.getItem("username") : Cookie.read("username");
+                  var headImg = window.localStorage ? localStorage.getItem("headImg") : Cookie.read("headImg");
+                  obj.user = username;
+                  obj.img = server+headImg;
+                  obj.content = text;
+
+                  $scope.comments[$scope.comments.length] = obj;
+                  $scope.comments[$scope.comments.length-1].content = splitPartgraph($scope.comments[$scope.comments.length-1].content);
+                  layer.msg("文字建议成功");
+                }
+              }
+            });
+          }
+          console.log(text);
+        }
+
+      });
+
+
+
     }
 
     $scope.deleteSuggest = function (type) {

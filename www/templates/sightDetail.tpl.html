@@ -1,4 +1,4 @@
-<ion-view view-title="景点详情">
+<ion-view view-title="景点详情" cache-view="false">
   <ion-nav-bar class="bar bar-positive"></ion-nav-bar>
   <ion-nav-buttons side="left">
     <button class="button button-positive" ng-click="goBack()"><i class="ion-arrow-left-c"></i> 后退</button>
@@ -36,7 +36,7 @@
               <li><a href="javascript:void(0)" title="4" class="four-stars">4</a></li>
               <li><a href="javascript:void(0)" title="5" class="five-stars">5</a></li>
             </ul>
-            <div class="current-rating" id="showb"></div>
+            <div class="current-rating" id="showb" style="width: {{sight.scoreWidth}}px"></div>
           </div>
         </div>
         <!--代码结束-->
@@ -68,8 +68,10 @@
 
     <div class="panel panel-default">
       <div class="panel-heading">
+        <input class="hidden" id="video-cover-file" type="file"
+               onchange="previewVideoCover()">
         <h3 class="panel-title">
-          图册
+          图册&nbsp;&nbsp;<button ng-click="addPhoto()">上传</button>&nbsp;&nbsp;<span style="display: none" id="selectInfo">已选择图片</span>&nbsp;&nbsp;<button style="display: none" ng-click="uploadPhoto()" id="confirmUploadPic">确认上传</button>
         </h3>
       </div>
       <div class="panel-body">
@@ -87,7 +89,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-          附加信息 <button ng-click="showToggle()">{{showText}}</button>
+          附加信息&nbsp;&nbsp;<button ng-click="showToggle()">{{showText}}</button>
         </h3>
       </div>
       <div class="panel-body" ng-show="isShowMore">
