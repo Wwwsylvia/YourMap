@@ -138,8 +138,18 @@ angular.module('mapModule', [])
       div.appendChild(document.createTextNode("查看景点详情"));
       // 设置样式
       div.style.cursor = "pointer";
-      div.style.border = "1px solid gray";
-      div.style.backgroundColor = "white";
+      div.style.fontWeight = "bold";
+      div.style.width = "110px";
+      div.style.height = "29px";
+      div.style.lineHeight = "29px";
+      div.style.fontSize = "14px";
+      div.style.textAlign = "center";
+      //div.style.color = "steelblue";
+      //div.style.border = "1px solid gray";
+      //div.style.backgroundColor = "rgba(136,136,136,0.6)";
+      div.style.backgroundColor = "rgba(255,255,255,0.85)";
+      div.style.boxShadow = "gray 1px 1px 1px 1px";
+
       // 绑定事件,点击一次放大两级
       div.onclick = function (e) {
         if ($stateParams.sightName != undefined) {

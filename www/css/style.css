@@ -69,6 +69,8 @@
   height: 34px;
   text-decoration: none;
   color: steelblue;
+  border: 0;
+  background: whitesmoke;
 }
 
 /*.personal-avatar-button {*/
@@ -251,4 +253,18 @@ footer > a {
   vertical-align: middle;
   font-size: 21px;
   float:left;
+}
+
+.sight-detail-button {
+  border: 0;
+  background: transparent;
+  color: steelblue;
+}
+
+.sight-detail-title, .sight-detail-top {
+  margin-left: 12px;
+}
+
+#comment-input {
+  resize: none;
 }
