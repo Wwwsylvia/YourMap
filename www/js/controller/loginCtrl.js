@@ -51,7 +51,7 @@ angular.module('loginModule',[])
             Cookie.write("username", response.user.username);
             Cookie.write("headImg", response.user.headImg);
           }
-          $ionicNavBarDelegate.back();
+          $state.go('tab.personal');
         } else {
           alertMsg("登录失败，"+response.error_message);
         }
